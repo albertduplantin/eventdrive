@@ -39,3 +39,21 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# drizzle
+/lib/db/migrations/*.sql
+drizzle/
+
+# IDE
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.swp
+*.swo
+*~
+
+# OS
+Thumbs.db
+
+# Keep .env.example
+!.env.example

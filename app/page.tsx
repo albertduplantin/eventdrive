@@ -1,65 +1,241 @@
-import Image from "next/image";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { ArrowRight, Calendar, Users, MapPin, Zap, Shield, BarChart3 } from "lucide-react";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <div className="min-h-screen bg-gradient-to-b from-zinc-50 to-white dark:from-zinc-950 dark:to-zinc-900">
+      {/* Header */}
+      <header className="border-b">
+        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <MapPin className="h-6 w-6 text-primary" />
+            <span className="text-xl font-bold">FestivalDrive</span>
+          </div>
+          <div className="flex items-center gap-4">
+            <Link href="/sign-in">
+              <Button variant="ghost">Connexion</Button>
+            </Link>
+            <Link href="/sign-up">
+              <Button>Commencer gratuitement</Button>
+            </Link>
+          </div>
+        </div>
+      </header>
+
+      {/* Hero Section */}
+      <section className="container mx-auto px-4 py-24 text-center">
+        <div className="mx-auto max-w-3xl space-y-6">
+          <h1 className="text-5xl font-bold tracking-tight sm:text-6xl">
+            Gérez vos chauffeurs bénévoles{" "}
+            <span className="text-primary">en toute simplicité</span>
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="text-xl text-muted-foreground">
+            La plateforme moderne pour coordonner les transports VIP de votre festival.
+            Affectation automatique, suivi GPS temps réel, et notifications multi-canal.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+            <Link href="/sign-up">
+              <Button size="lg" className="gap-2">
+                Démarrer gratuitement <ArrowRight className="h-4 w-4" />
+              </Button>
+            </Link>
+            <Link href="#features">
+              <Button size="lg" variant="outline">
+                Découvrir les fonctionnalités
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section id="features" className="container mx-auto px-4 py-24">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl font-bold mb-4">
+            Tout ce dont vous avez besoin
+          </h2>
+          <p className="text-muted-foreground text-lg">
+            Une solution complète pour automatiser la gestion de vos transports
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <Card>
+            <CardHeader>
+              <Zap className="h-10 w-10 text-primary mb-2" />
+              <CardTitle>Affectation automatique</CardTitle>
+              <CardDescription>
+                Algorithme intelligent qui assigne les chauffeurs selon disponibilité, équité et proximité
+              </CardDescription>
+            </CardHeader>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <MapPin className="h-10 w-10 text-primary mb-2" />
+              <CardTitle>Suivi GPS temps réel</CardTitle>
+              <CardDescription>
+                Les VIPs peuvent suivre leur chauffeur en direct sur une carte interactive
+              </CardDescription>
+            </CardHeader>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <Users className="h-10 w-10 text-primary mb-2" />
+              <CardTitle>Gestion multi-rôles</CardTitle>
+              <CardDescription>
+                Coordinateurs, responsables VIP, gestionnaires de chauffeurs : chacun son interface
+              </CardDescription>
+            </CardHeader>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <Calendar className="h-10 w-10 text-primary mb-2" />
+              <CardTitle>Planning intelligent</CardTitle>
+              <CardDescription>
+                Tableau interactif type Excel avec détection automatique des conflits horaires
+              </CardDescription>
+            </CardHeader>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <Shield className="h-10 w-10 text-primary mb-2" />
+              <CardTitle>Notifications multi-canal</CardTitle>
+              <CardDescription>
+                Email, SMS, Telegram, Discord, Slack : communiquez sur les canaux de votre choix
+              </CardDescription>
+            </CardHeader>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <BarChart3 className="h-10 w-10 text-primary mb-2" />
+              <CardTitle>Analytics & Rapports</CardTitle>
+              <CardDescription>
+                Statistiques détaillées et exports pour optimiser vos opérations
+              </CardDescription>
+            </CardHeader>
+          </Card>
         </div>
-      </main>
+      </section>
+
+      {/* Pricing Section */}
+      <section className="bg-zinc-100 dark:bg-zinc-900 py-24">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold mb-4">Tarifs simples et transparents</h2>
+            <p className="text-muted-foreground text-lg">
+              Choisissez le plan adapté à la taille de votre festival
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            <Card>
+              <CardHeader>
+                <CardTitle>Gratuit</CardTitle>
+                <div className="mt-4">
+                  <span className="text-4xl font-bold">0€</span>
+                  <span className="text-muted-foreground">/mois</span>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <ul className="space-y-2 text-sm">
+                  <li>✓ Jusqu'à 20 VIPs</li>
+                  <li>✓ 5 chauffeurs max</li>
+                  <li>✓ 1 festival</li>
+                  <li>✓ Affectations manuelles</li>
+                  <li>✓ Notifications email</li>
+                </ul>
+                <Link href="/sign-up" className="block">
+                  <Button className="w-full" variant="outline">
+                    Commencer
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+
+            <Card className="border-primary shadow-lg">
+              <CardHeader>
+                <div className="inline-block px-3 py-1 bg-primary text-primary-foreground text-xs rounded-full mb-2">
+                  POPULAIRE
+                </div>
+                <CardTitle>Pro</CardTitle>
+                <div className="mt-4">
+                  <span className="text-4xl font-bold">29€</span>
+                  <span className="text-muted-foreground">/mois</span>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <ul className="space-y-2 text-sm">
+                  <li>✓ Jusqu'à 100 VIPs</li>
+                  <li>✓ 20 chauffeurs</li>
+                  <li>✓ Affectation automatique</li>
+                  <li>✓ Suivi GPS temps réel</li>
+                  <li>✓ SMS + Telegram + Email</li>
+                  <li>✓ Support prioritaire</li>
+                </ul>
+                <Link href="/sign-up" className="block">
+                  <Button className="w-full">Essayer Pro</Button>
+                </Link>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Enterprise</CardTitle>
+                <div className="mt-4">
+                  <span className="text-4xl font-bold">99€</span>
+                  <span className="text-muted-foreground">/mois</span>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <ul className="space-y-2 text-sm">
+                  <li>✓ VIPs illimités</li>
+                  <li>✓ Chauffeurs illimités</li>
+                  <li>✓ Festivals illimités</li>
+                  <li>✓ Toutes fonctionnalités Pro</li>
+                  <li>✓ API & Webhooks</li>
+                  <li>✓ Support téléphone</li>
+                </ul>
+                <Link href="/sign-up" className="block">
+                  <Button className="w-full" variant="outline">
+                    Contacter
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="container mx-auto px-4 py-24 text-center">
+        <div className="max-w-2xl mx-auto space-y-6">
+          <h2 className="text-4xl font-bold">
+            Prêt à simplifier vos transports ?
+          </h2>
+          <p className="text-xl text-muted-foreground">
+            Rejoignez les festivals qui utilisent FestivalDrive pour coordonner leurs chauffeurs
+          </p>
+          <Link href="/sign-up">
+            <Button size="lg" className="gap-2">
+              Créer mon compte gratuitement <ArrowRight className="h-4 w-4" />
+            </Button>
+          </Link>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="border-t py-12">
+        <div className="container mx-auto px-4 text-center text-muted-foreground">
+          <p>&copy; 2025 FestivalDrive. Tous droits réservés.</p>
+        </div>
+      </footer>
     </div>
   );
 }

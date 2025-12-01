@@ -88,7 +88,6 @@ export async function setMyAvailability(data: SetMyAvailabilityData) {
         .update(driverAvailabilities)
         .set({
           isAvailable: data.isAvailable,
-          notes: data.notes,
           updatedAt: new Date(),
         })
         .where(eq(driverAvailabilities.id, existing[0].id));
@@ -100,7 +99,6 @@ export async function setMyAvailability(data: SetMyAvailabilityData) {
         date: normalizedDate,
         slot: data.slot,
         isAvailable: data.isAvailable,
-        notes: data.notes,
       });
     }
 

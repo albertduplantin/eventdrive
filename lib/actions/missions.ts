@@ -136,7 +136,7 @@ export async function createMission(data: CreateMissionData) {
         driverId: data.driverId,
         assignedById: userData.dbUser.id,
         assignmentMethod: data.assignmentMethod || 'MANUAL',
-        assignmentScore: data.assignmentScore,
+        assignmentScore: data.assignmentScore ? String(data.assignmentScore) : null,
         status: 'PROPOSED',
       })
       .returning();

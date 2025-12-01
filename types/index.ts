@@ -117,7 +117,7 @@ export type UserWithFestival = User & {
 };
 
 export type TransportRequestWithRelations = TransportRequest & {
-  vip: Vip | null;
+  vip: User | null;
   createdBy: User;
   festival: Festival;
   missions?: MissionWithDriver[];

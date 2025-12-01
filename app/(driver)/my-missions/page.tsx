@@ -182,9 +182,13 @@ export default function MyMissionsPage() {
   };
 
   const getRequestLabel = (request: typeof transportRequests.$inferSelect) => {
-    if (request.artistName) return request.artistName;
-    if (request.guestName) return request.guestName;
-    return 'Transport générique';
+    const typeLabels: Record<string, string> = {
+      STATION_TO_VENUE: 'Gare → Site',
+      VENUE_TO_STATION: 'Site → Gare',
+      INTRA_CITY: 'Intra-ville',
+      OTHER: 'Autre',
+    };
+    return typeLabels[request.type] || 'Transport';
   };
 
   const proposedMissions = missions.filter(m => m.mission.status === 'PROPOSED');
@@ -281,7 +285,7 @@ export default function MyMissionsPage() {
                           <div>
                             <div className="font-medium">Départ</div>
                             <div className="text-muted-foreground">
-                              {item.transportRequest.pickupLocation}
+                              {item.transportRequest.pickupAddress}
                             </div>
                           </div>
                         </div>
@@ -290,7 +294,7 @@ export default function MyMissionsPage() {
                           <div>
                             <div className="font-medium">Arrivée</div>
                             <div className="text-muted-foreground">
-                              {item.transportRequest.dropoffLocation}
+                              {item.transportRequest.dropoffAddress}
                             </div>
                           </div>
                         </div>
@@ -372,7 +376,7 @@ export default function MyMissionsPage() {
                           <div>
                             <div className="font-medium">Départ</div>
                             <div className="text-muted-foreground">
-                              {item.transportRequest.pickupLocation}
+                              {item.transportRequest.pickupAddress}
                             </div>
                           </div>
                         </div>
@@ -381,7 +385,7 @@ export default function MyMissionsPage() {
                           <div>
                             <div className="font-medium">Arrivée</div>
                             <div className="text-muted-foreground">
-                              {item.transportRequest.dropoffLocation}
+                              {item.transportRequest.dropoffAddress}
                             </div>
                           </div>
                         </div>
@@ -447,7 +451,7 @@ export default function MyMissionsPage() {
                           <div>
                             <div className="font-medium">Départ</div>
                             <div className="text-muted-foreground">
-                              {item.transportRequest.pickupLocation}
+                              {item.transportRequest.pickupAddress}
                             </div>
                           </div>
                         </div>
@@ -456,7 +460,7 @@ export default function MyMissionsPage() {
                           <div>
                             <div className="font-medium">Arrivée</div>
                             <div className="text-muted-foreground">
-                              {item.transportRequest.dropoffLocation}
+                              {item.transportRequest.dropoffAddress}
                             </div>
                           </div>
                         </div>
@@ -522,7 +526,7 @@ export default function MyMissionsPage() {
                           <div>
                             <div className="font-medium">Départ</div>
                             <div className="text-muted-foreground">
-                              {item.transportRequest.pickupLocation}
+                              {item.transportRequest.pickupAddress}
                             </div>
                           </div>
                         </div>
@@ -531,7 +535,7 @@ export default function MyMissionsPage() {
                           <div>
                             <div className="font-medium">Arrivée</div>
                             <div className="text-muted-foreground">
-                              {item.transportRequest.dropoffLocation}
+                              {item.transportRequest.dropoffAddress}
                             </div>
                           </div>
                         </div>

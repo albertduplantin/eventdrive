@@ -77,7 +77,7 @@ export function TransportFormDialog({ open, onOpenChange, transport, onSuccess }
           dropoffAddress: transport.dropoffAddress,
           requestedDatetime: new Date(transport.requestedDatetime).toISOString().slice(0, 16),
           estimatedDurationMinutes: transport.estimatedDurationMinutes || undefined,
-          passengerCount: transport.passengerCount,
+          passengerCount: transport.passengerCount || 1,
           notes: transport.notes || '',
         }
       : {
@@ -117,8 +117,8 @@ export function TransportFormDialog({ open, onOpenChange, transport, onSuccess }
       };
 
       const result = isEditing
-        ? await updateTransportRequest({ ...payload, id: transport.id })
-        : await createTransportRequest(payload);
+        ? await updateTransportRequest({ ...payload, id: transport.id } as any)
+        : await createTransportRequest(payload as any);
 
       if (result.success) {
         toast.success(isEditing ? 'Demande modifiée avec succès' : 'Demande créée avec succès');

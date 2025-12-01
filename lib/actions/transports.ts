@@ -259,13 +259,16 @@ export async function getTransportRequests(filters?: GetTransportsFilters) {
 
     // Recherche textuelle
     if (filters?.searchQuery && filters.searchQuery.length > 0) {
-      conditions.push(
-        or(
-          like(transportRequests.pickupAddress, `%${filters.searchQuery}%`),
-          like(transportRequests.dropoffAddress, `%${filters.searchQuery}%`),
-          like(transportRequests.notes, `%${filters.searchQuery}%`)
-        )
-      );
+      const searchConditions = [
+        like(transportRequests.pickupAddress, `%${filters.searchQuery}%`),
+        like(transportRequests.dropoffAddress, `%${filters.searchQuery}%`),
+      ];
+      // Only add notes search if not null
+      const notesSearch = like(transportRequests.notes, `%${filters.searchQuery}%`);
+      if (notesSearch) {
+        searchConditions.push(notesSearch);
+      }
+      conditions.push(or(...searchConditions)!);
     }
 
     const result = await db

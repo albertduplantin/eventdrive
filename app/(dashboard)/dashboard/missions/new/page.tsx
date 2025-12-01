@@ -10,6 +10,7 @@ import { toast } from 'sonner';
 import { getTransportRequests } from '@/lib/actions/transports';
 import { suggestDrivers, createMission } from '@/lib/actions/missions';
 import type { transportRequests, users } from '@/lib/db/schema';
+import { RequestStatus } from '@/types';
 import {
   Select,
   SelectContent,
@@ -53,13 +54,13 @@ export default function NewMissionPage() {
     setIsLoadingRequests(true);
     try {
       const result = await getTransportRequests({
-        status: 'PENDING',
+        status: RequestStatus.PENDING,
       });
 
-      if (result.success) {
+      if (result.success && result.requests) {
         setRequests(result.requests);
       } else {
-        toast.error(result.error);
+        toast.error(result.error || 'Erreur lors du chargement');
       }
     } catch (error) {
       toast.error('Erreur lors du chargement des demandes');
@@ -132,10 +133,19 @@ export default function NewMissionPage() {
     });
   };
 
-  const getRequestLabel = (request: typeof transportRequests.$inferSelect) => {
-    if (request.artistName) return request.artistName;
-    if (request.guestName) return request.guestName;
-    return 'Transport générique';
+  const getRequestLabel = (request: any) => {
+    // If request has vip data (from join)
+    if (request.vip) {
+      return `${request.vip.firstName} ${request.vip.lastName}`;
+    }
+    // Fallback to type description
+    const typeLabels: Record<string, string> = {
+      STATION_TO_VENUE: 'Gare → Site',
+      VENUE_TO_STATION: 'Site → Gare',
+      INTRA_CITY: 'Intra-ville',
+      OTHER: 'Autre',
+    };
+    return typeLabels[request.type] || 'Transport';
   };
 
   const selectedRequest = requests.find(r => r.id === selectedRequestId);
@@ -228,14 +238,14 @@ export default function NewMissionPage() {
                       <MapPin className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
                       <div>
                         <div className="font-medium">Départ</div>
-                        <div className="text-muted-foreground">{selectedRequest.pickupLocation}</div>
+                        <div className="text-muted-foreground">{selectedRequest.pickupAddress}</div>
                       </div>
                     </div>
                     <div className="flex items-start gap-2">
                       <MapPin className="h-4 w-4 text-red-600 mt-0.5 flex-shrink-0" />
                       <div>
                         <div className="font-medium">Arrivée</div>
-                        <div className="text-muted-foreground">{selectedRequest.dropoffLocation}</div>
+                        <div className="text-muted-foreground">{selectedRequest.dropoffAddress}</div>
                       </div>
                     </div>
                   </div>

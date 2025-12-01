@@ -25,8 +25,8 @@ interface MissionWithDetails {
   transportRequest: typeof transportRequests.$inferSelect;
   driver: {
     id: string;
-    firstName: string;
-    lastName: string;
+    firstName: string | null;
+    lastName: string | null;
     email: string;
     phone: string | null;
   };
@@ -81,12 +81,11 @@ export default function MissionsPage() {
   const filteredMissions = missions.filter((m) => {
     const searchLower = searchTerm.toLowerCase();
     return (
-      m.driver.firstName.toLowerCase().includes(searchLower) ||
-      m.driver.lastName.toLowerCase().includes(searchLower) ||
-      m.transportRequest.pickupLocation.toLowerCase().includes(searchLower) ||
-      m.transportRequest.dropoffLocation.toLowerCase().includes(searchLower) ||
-      m.transportRequest.artistName?.toLowerCase().includes(searchLower) ||
-      m.transportRequest.guestName?.toLowerCase().includes(searchLower)
+      m.driver.firstName?.toLowerCase().includes(searchLower) ||
+      m.driver.lastName?.toLowerCase().includes(searchLower) ||
+      m.driver.email.toLowerCase().includes(searchLower) ||
+      m.transportRequest.pickupAddress.toLowerCase().includes(searchLower) ||
+      m.transportRequest.dropoffAddress.toLowerCase().includes(searchLower)
     );
   });
 
@@ -101,10 +100,14 @@ export default function MissionsPage() {
     });
   };
 
-  const getRequestLabel = (request: typeof transportRequests.$inferSelect) => {
-    if (request.artistName) return request.artistName;
-    if (request.guestName) return request.guestName;
-    return 'Transport générique';
+  const getRequestLabel = (request: any) => {
+    const typeLabels: Record<string, string> = {
+      STATION_TO_VENUE: 'Gare → Site',
+      VENUE_TO_STATION: 'Site → Gare',
+      INTRA_CITY: 'Intra-ville',
+      OTHER: 'Autre',
+    };
+    return typeLabels[request.type] || 'Transport';
   };
 
   if (isLoading) {
@@ -255,7 +258,7 @@ export default function MissionsPage() {
                       <div>
                         <div className="font-medium">Départ</div>
                         <div className="text-muted-foreground">
-                          {item.transportRequest.pickupLocation}
+                          {item.transportRequest.pickupAddress}
                         </div>
                       </div>
                     </div>
@@ -264,7 +267,7 @@ export default function MissionsPage() {
                       <div>
                         <div className="font-medium">Arrivée</div>
                         <div className="text-muted-foreground">
-                          {item.transportRequest.dropoffLocation}
+                          {item.transportRequest.dropoffAddress}
                         </div>
                       </div>
                     </div>

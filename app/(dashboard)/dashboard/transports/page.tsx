@@ -30,7 +30,7 @@ import type { TransportRequestWithRelations, RequestStatus, TransportType } from
 const STATUS_LABELS: Record<RequestStatus, string> = {
   PENDING: 'En attente',
   ASSIGNED: 'Assignée',
-  CONFIRMED: 'Confirmée',
+  ACCEPTED: 'Acceptée',
   IN_PROGRESS: 'En cours',
   COMPLETED: 'Terminée',
   CANCELLED: 'Annulée',
@@ -39,7 +39,7 @@ const STATUS_LABELS: Record<RequestStatus, string> = {
 const STATUS_COLORS: Record<RequestStatus, string> = {
   PENDING: 'bg-yellow-100 text-yellow-800',
   ASSIGNED: 'bg-blue-100 text-blue-800',
-  CONFIRMED: 'bg-green-100 text-green-800',
+  ACCEPTED: 'bg-green-100 text-green-800',
   IN_PROGRESS: 'bg-purple-100 text-purple-800',
   COMPLETED: 'bg-gray-100 text-gray-800',
   CANCELLED: 'bg-red-100 text-red-800',
@@ -71,8 +71,8 @@ export default function TransportsPage() {
       };
 
       const result = await getTransportRequests(filters);
-      if (result.success) {
-        setTransports(result.requests);
+      if (result.success && result.requests) {
+        setTransports(result.requests as TransportRequestWithRelations[]);
       } else {
         toast.error(result.error || 'Erreur lors du chargement des demandes');
       }
@@ -188,7 +188,7 @@ export default function TransportsPage() {
               <SelectItem value="ALL">Tous les statuts</SelectItem>
               <SelectItem value="PENDING">En attente</SelectItem>
               <SelectItem value="ASSIGNED">Assignée</SelectItem>
-              <SelectItem value="CONFIRMED">Confirmée</SelectItem>
+              <SelectItem value="ACCEPTED">Acceptée</SelectItem>
               <SelectItem value="IN_PROGRESS">En cours</SelectItem>
               <SelectItem value="COMPLETED">Terminée</SelectItem>
               <SelectItem value="CANCELLED">Annulée</SelectItem>
@@ -232,9 +232,9 @@ export default function TransportsPage() {
         </div>
         <div className="rounded-lg border-2 border-blue-200 bg-blue-50 p-4">
           <div className="text-2xl font-bold text-blue-900">
-            {transports.filter(t => t.status === 'ASSIGNED' || t.status === 'CONFIRMED').length}
+            {transports.filter(t => t.status === 'ASSIGNED' || t.status === 'ACCEPTED').length}
           </div>
-          <div className="text-sm text-blue-700">Assignées</div>
+          <div className="text-sm text-blue-700">Assignées/Acceptées</div>
         </div>
         <div className="rounded-lg border-2 border-green-200 bg-green-50 p-4">
           <div className="text-2xl font-bold text-green-900">

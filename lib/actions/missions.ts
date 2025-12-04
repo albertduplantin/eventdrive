@@ -422,3 +422,63 @@ export async function getMyMissions(filters?: { status?: MissionStatus }) {
     return { success: false, error: 'Erreur lors de la récupération des missions', missions: [] };
   }
 }
+
+/**
+ * Récupère toutes les missions d'un chauffeur spécifique (pour l'interface admin)
+ */
+export async function getDriverMissions(driverId: string) {
+  try {
+    const userData = await getCurrentUser();
+
+    if (!userData?.dbUser) {
+      return { success: false, error: 'Non autorisé', missions: [] };
+    }
+
+    // Vérifier que le chauffeur appartient au même festival
+    const [driver] = await db
+      .select()
+      .from(users)
+      .where(
+        and(
+          eq(users.id, driverId),
+          eq(users.festivalId, userData.dbUser.festivalId)
+        )
+      )
+      .limit(1);
+
+    if (!driver) {
+      return { success: false, error: 'Chauffeur non trouvé', missions: [] };
+    }
+
+    const result = await db
+      .select({
+        id: missions.id,
+        createdAt: missions.createdAt,
+        updatedAt: missions.updatedAt,
+        driverId: missions.driverId,
+        status: missions.status,
+        transportRequestId: missions.transportRequestId,
+        assignedById: missions.assignedById,
+        assignmentMethod: missions.assignmentMethod,
+        assignmentScore: missions.assignmentScore,
+        acceptedAt: missions.acceptedAt,
+        declinedAt: missions.declinedAt,
+        declinedReason: missions.declinedReason,
+        startedAt: missions.startedAt,
+        completedAt: missions.completedAt,
+        scheduledDate: transportRequests.requestedDatetime,
+        scheduledTime: sql<string>`TO_CHAR(${transportRequests.requestedDatetime}, 'HH24:MI')`.as('scheduledTime'),
+        pickupLocation: transportRequests.pickupAddress,
+        dropoffLocation: transportRequests.dropoffAddress,
+      })
+      .from(missions)
+      .innerJoin(transportRequests, eq(missions.transportRequestId, transportRequests.id))
+      .where(eq(missions.driverId, driverId))
+      .orderBy(sql`${transportRequests.requestedDatetime} DESC`);
+
+    return { success: true, missions: result };
+  } catch (error) {
+    console.error('Error fetching driver missions:', error);
+    return { success: false, error: 'Erreur lors de la récupération des missions du chauffeur', missions: [] };
+  }
+}

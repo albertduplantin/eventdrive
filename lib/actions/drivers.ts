@@ -87,6 +87,62 @@ export async function getDriverById(id: string) {
 }
 
 /**
+ * Crée un nouveau chauffeur
+ */
+export async function createDriver(data: {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone?: string;
+  address?: string;
+}) {
+  try {
+    const userData = await getCurrentUser();
+
+    if (!userData?.dbUser?.festivalId) {
+      return { success: false, error: 'Non autorisé' };
+    }
+
+    // Vérifier que l'email n'est pas déjà utilisé
+    const existingUser = await db
+      .select()
+      .from(users)
+      .where(eq(users.email, data.email))
+      .limit(1);
+
+    if (existingUser.length > 0) {
+      return { success: false, error: 'Cette adresse email est déjà utilisée' };
+    }
+
+    // Créer le chauffeur avec un clerkUserId temporaire
+    // Note: L'utilisateur devra se connecter via Clerk pour obtenir un vrai clerkUserId
+    const tempClerkUserId = `manual_${Date.now()}_${Math.random().toString(36).substring(7)}`;
+
+    const [newDriver] = await db
+      .insert(users)
+      .values({
+        clerkUserId: tempClerkUserId,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        phone: data.phone || null,
+        address: data.address || null,
+        role: 'DRIVER',
+        festivalId: userData.dbUser.festivalId,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      })
+      .returning();
+
+    revalidatePath('/dashboard/drivers');
+    return { success: true, driver: newDriver };
+  } catch (error) {
+    console.error('Error creating driver:', error);
+    return { success: false, error: 'Erreur lors de la création du chauffeur' };
+  }
+}
+
+/**
  * Met à jour les informations d'un chauffeur
  */
 export async function updateDriver(data: {

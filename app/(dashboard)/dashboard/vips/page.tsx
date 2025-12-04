@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { Plus, Search, FileDown, Upload, Pencil, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -19,6 +20,7 @@ import { toast } from 'sonner';
 import type { vips } from '@/lib/db/schema';
 
 export default function VipsPage() {
+  const router = useRouter();
   const [vipList, setVipList] = useState<Array<typeof vips.$inferSelect>>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
@@ -74,8 +76,7 @@ export default function VipsPage() {
   };
 
   const handleAdd = () => {
-    setSelectedVip(null);
-    setIsFormOpen(true);
+    router.push('/dashboard/vips/new');
   };
 
   const handleFormSuccess = () => {

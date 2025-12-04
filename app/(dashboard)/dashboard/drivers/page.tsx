@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Search, User, Mail, Phone, MapPin, Calendar } from 'lucide-react';
+import { Search, User, Mail, Phone, MapPin, Calendar, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -76,6 +76,10 @@ export default function DriversPage() {
             Gérez votre équipe de chauffeurs
           </p>
         </div>
+        <Button onClick={() => router.push('/dashboard/drivers/new')}>
+          <Plus className="h-4 w-4 mr-2" />
+          Ajouter un chauffeur
+        </Button>
       </div>
 
       {/* Filters */}

@@ -31,12 +31,12 @@ export default function DriverAvailabilityPage() {
       if (driverResult.success && driverResult.driver) {
         setDriver(driverResult.driver);
       } else {
-        toast.error(driverResult.error || 'Chauffeur non trouvé');
+        toast.error(driverResult.error || 'Chauffeur non trouve');
         router.push('/dashboard/drivers');
         return;
       }
     } catch (error) {
-      toast.error('Erreur lors du chargement des données');
+      toast.error('Erreur lors du chargement des donnees');
     } finally {
       setIsLoading(false);
     }
@@ -76,10 +76,10 @@ export default function DriverAvailabilityPage() {
         </Button>
         <div>
           <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-            Disponibilités - {driver.firstName} {driver.lastName}
+            Disponibilites - {driver.firstName} {driver.lastName}
           </h1>
           <p className="text-muted-foreground mt-1">
-            Gérez les disponibilités du chauffeur
+            Gerez les disponibilites du chauffeur
           </p>
         </div>
       </div>
@@ -114,7 +114,7 @@ export default function DriverAvailabilityPage() {
           onClick={() => setCurrentWeekStart(addDays(currentWeekStart, -7))}
         >
           <ChevronLeft className="h-4 w-4 mr-2" />
-          Semaine précédente
+          Semaine precedente
         </Button>
         <div className="text-lg font-semibold">
           {format(currentWeekStart, 'dd MMM', { locale: fr })} - {format(addDays(currentWeekStart, 6), 'dd MMM yyyy', { locale: fr })}
@@ -152,7 +152,7 @@ export default function DriverAvailabilityPage() {
 
               <div className="space-y-2 min-h-[100px]">
                 <div className="text-center py-4 text-xs text-muted-foreground">
-                  Fonctionnalité en développement
+                  Fonctionnalite en developpement
                 </div>
               </div>
 
@@ -175,10 +175,10 @@ export default function DriverAvailabilityPage() {
         <div className="flex items-start gap-3">
           <Clock className="h-5 w-5 text-blue-600 mt-0.5" />
           <div>
-            <h3 className="font-semibold text-blue-900">Gestion des disponibilités</h3>
+            <h3 className="font-semibold text-blue-900">Gestion des disponibilites</h3>
             <p className="text-sm text-blue-700 mt-1">
-              La gestion complète des disponibilités des chauffeurs avec création, modification et suppression
-              de créneaux horaires sera disponible prochainement.
+              La gestion complete des disponibilites des chauffeurs avec creation, modification et suppression
+              de creneaux horaires sera disponible prochainement.
             </p>
           </div>
         </div>

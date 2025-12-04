@@ -11,7 +11,8 @@ import {
 import { Button } from '@/components/ui/button';
 import { Upload, FileText, AlertCircle, CheckCircle2 } from 'lucide-react';
 import { toast } from 'sonner';
-import { importVipsFromCSV } from '@/lib/actions/vips';
+// TODO: Implement importVipsFromCSV function
+// import { importVipsFromCSV } from '@/lib/actions/vips';
 
 interface VipImportDialogProps {
   open: boolean;
@@ -120,7 +121,9 @@ export function VipImportDialog({ open, onOpenChange, onSuccess }: VipImportDial
 
     setIsLoading(true);
     try {
-      const result = await importVipsFromCSV(previewData);
+      // TODO: Implement importVipsFromCSV function
+      toast.error('Fonctionnalité d\'import CSV en cours de développement');
+      /* const result = await importVipsFromCSV(previewData);
 
       if (result.success) {
         toast.success(`${result.imported} VIP(s) importé(s) avec succès`);
@@ -132,7 +135,7 @@ export function VipImportDialog({ open, onOpenChange, onSuccess }: VipImportDial
         onSuccess?.();
       } else {
         toast.error(result.error || 'Erreur lors de l\'importation');
-      }
+      } */
     } catch (error) {
       toast.error('Erreur lors de l\'importation');
     } finally {

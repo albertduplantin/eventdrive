@@ -1,4 +1,4 @@
-'use client';
+ï»¿'use client';
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -44,13 +44,13 @@ export default function NewDriverPage() {
       });
 
       if (result.success) {
-        toast.success('Chauffeur créé avec succès');
+        toast.success('Chauffeur crï¿½ï¿½ avec succï¿½s');
         router.push('/dashboard/drivers');
       } else {
-        toast.error(result.error || 'Erreur lors de la création');
+        toast.error(result.error || 'Erreur lors de la crï¿½ation');
       }
     } catch (error) {
-      toast.error('Erreur lors de la création');
+      toast.error('Erreur lors de la crï¿½ation');
     } finally {
       setIsSubmitting(false);
     }
@@ -72,7 +72,7 @@ export default function NewDriverPage() {
             Nouveau chauffeur
           </h1>
           <p className="text-muted-foreground mt-1">
-            Ajoutez un nouveau chauffeur à votre équipe
+            Ajoutez un nouveau chauffeur ï¿½ votre ï¿½quipe
           </p>
         </div>
       </div>
@@ -92,7 +92,7 @@ export default function NewDriverPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="firstName">
-                  Prénom <span className="text-red-500">*</span>
+                  Prï¿½nom <span className="text-red-500">*</span>
                 </Label>
                 <Input
                   id="firstName"
@@ -134,7 +134,7 @@ export default function NewDriverPage() {
 
             {/* Phone */}
             <div className="space-y-2">
-              <Label htmlFor="phone">Téléphone</Label>
+              <Label htmlFor="phone">Tï¿½lï¿½phone</Label>
               <Input
                 id="phone"
                 type="tel"
@@ -163,7 +163,7 @@ export default function NewDriverPage() {
                 className="flex-1"
               >
                 <Save className="h-4 w-4 mr-2" />
-                {isSubmitting ? 'Création...' : 'Créer le chauffeur'}
+                {isSubmitting ? 'Crï¿½ation...' : 'Crï¿½er le chauffeur'}
               </Button>
               <Button
                 type="button"
@@ -182,7 +182,7 @@ export default function NewDriverPage() {
       <Card className="p-4 bg-blue-50 border-blue-200">
         <p className="text-sm text-blue-700">
           <strong>Note :</strong> Le chauffeur recevra un email d'invitation pour
-          créer son compte et accéder à l'application mobile.
+          crï¿½er son compte et accï¿½der ï¿½ l'application mobile.
         </p>
       </Card>
     </div>

@@ -38,7 +38,10 @@
       "Bash(then mv \"app/(dashboard)/dashboard/drivers/page.tsx.bak\" \"app/(dashboard)/dashboard/drivers/page.tsx\")",
       "Bash(else mkdir -p \"app/(dashboard)/dashboard/drivers\")",
       "Bash(fi)",
-      "Bash(git restore:*)"
+      "Bash(git restore:*)",
+      "Bash(npm update:*)",
+      "Bash(npm audit:*)",
+      "Bash(powershell -Command:*)"
     ],
     "deny": [],
     "ask": []

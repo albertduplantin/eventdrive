@@ -17,6 +17,7 @@ export default function DriversPage() {
   const [drivers, setDrivers] = useState<Array<typeof users.$inferSelect>>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
 
   const loadDrivers = async () => {
     setIsLoading(true);
@@ -39,16 +40,29 @@ export default function DriversPage() {
   };
 
   useEffect(() => {
+    setMounted(true);
     loadDrivers();
   }, []);
 
   useEffect(() => {
+    if (!mounted) return;
+
     const delaySearch = setTimeout(() => {
       loadDrivers();
     }, 300);
 
     return () => clearTimeout(delaySearch);
   }, [searchQuery]);
+
+  if (!mounted) {
+    return (
+      <div className="p-8 space-y-6">
+        <div className="text-center py-12 text-muted-foreground">
+          Chargement...
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-8 space-y-6">
@@ -81,28 +95,30 @@ export default function DriversPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="rounded-lg border-2 border-purple-200 bg-purple-50 p-4">
-          <div className="text-2xl font-bold text-purple-900">{drivers.length}</div>
-          <div className="text-sm text-purple-700">Total chauffeurs</div>
-        </div>
-        <div className="rounded-lg border-2 border-green-200 bg-green-50 p-4">
-          <div className="text-2xl font-bold text-green-900">
-            {drivers.filter(d => d.phone).length}
+      {!isLoading && (
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="rounded-lg border-2 border-purple-200 bg-purple-50 p-4">
+            <div className="text-2xl font-bold text-purple-900">{drivers.length}</div>
+            <div className="text-sm text-purple-700">Total chauffeurs</div>
           </div>
-          <div className="text-sm text-green-700">Avec téléphone</div>
-        </div>
-        <div className="rounded-lg border-2 border-blue-200 bg-blue-50 p-4">
-          <div className="text-2xl font-bold text-blue-900">
-            {drivers.filter(d => d.address).length}
+          <div className="rounded-lg border-2 border-green-200 bg-green-50 p-4">
+            <div className="text-2xl font-bold text-green-900">
+              {drivers.filter(d => d.phone).length}
+            </div>
+            <div className="text-sm text-green-700">Avec téléphone</div>
           </div>
-          <div className="text-sm text-blue-700">Avec adresse</div>
+          <div className="rounded-lg border-2 border-blue-200 bg-blue-50 p-4">
+            <div className="text-2xl font-bold text-blue-900">
+              {drivers.filter(d => d.address).length}
+            </div>
+            <div className="text-sm text-blue-700">Avec adresse</div>
+          </div>
+          <div className="rounded-lg border-2 border-orange-200 bg-orange-50 p-4">
+            <div className="text-2xl font-bold text-orange-900">0</div>
+            <div className="text-sm text-orange-700">Disponibles aujourd'hui</div>
+          </div>
         </div>
-        <div className="rounded-lg border-2 border-orange-200 bg-orange-50 p-4">
-          <div className="text-2xl font-bold text-orange-900">0</div>
-          <div className="text-sm text-orange-700">Disponibles aujourd'hui</div>
-        </div>
-      </div>
+      )}
 
       {/* Drivers Grid */}
       {isLoading ? (

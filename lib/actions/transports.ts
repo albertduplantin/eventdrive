@@ -54,17 +54,63 @@ export async function createTransportRequest(data: CreateTransportRequestData) {
       return { success: false, error: 'VIP non trouvé' };
     }
 
+    // Géocoder les adresses si Radar API est configuré
+    let pickupLat: string | null = null;
+    let pickupLng: string | null = null;
+    let dropoffLat: string | null = null;
+    let dropoffLng: string | null = null;
+    let calculatedDuration: number | null = null;
+
+    try {
+      const { geocodeAddress, calculateDistance } = await import('@/lib/services/radar-api');
+
+      // Géocoder l'adresse de départ
+      const pickupResult = await geocodeAddress(data.pickupAddress);
+      if (pickupResult.success && pickupResult.latitude && pickupResult.longitude) {
+        pickupLat = String(pickupResult.latitude);
+        pickupLng = String(pickupResult.longitude);
+      }
+
+      // Géocoder l'adresse d'arrivée
+      const dropoffResult = await geocodeAddress(data.dropoffAddress);
+      if (dropoffResult.success && dropoffResult.latitude && dropoffResult.longitude) {
+        dropoffLat = String(dropoffResult.latitude);
+        dropoffLng = String(dropoffResult.longitude);
+      }
+
+      // Calculer la distance et la durée si les deux adresses sont géocodées
+      if (pickupLat && pickupLng && dropoffLat && dropoffLng) {
+        const distanceResult = await calculateDistance(
+          parseFloat(pickupLat),
+          parseFloat(pickupLng),
+          parseFloat(dropoffLat),
+          parseFloat(dropoffLng)
+        );
+
+        if (distanceResult.success && distanceResult.durationMinutes) {
+          calculatedDuration = distanceResult.durationMinutes;
+        }
+      }
+    } catch (error) {
+      console.warn('Error geocoding addresses or calculating distance:', error);
+      // Continue without geocoding
+    }
+
     await db.insert(transportRequests).values({
       festivalId: userData.dbUser.festivalId,
       vipId: data.vipId,
       createdById: userData.dbUser.id,
       type: data.type,
       pickupAddress: data.pickupAddress,
+      pickupLat,
+      pickupLng,
       dropoffAddress: data.dropoffAddress,
+      dropoffLat,
+      dropoffLng,
       requestedDatetime: data.requestedDatetime,
       passengerCount: data.passengerCount || 1,
       notes: data.notes || null,
-      estimatedDurationMinutes: data.estimatedDurationMinutes || null,
+      estimatedDurationMinutes: data.estimatedDurationMinutes || calculatedDuration,
       status: 'PENDING',
     });
 

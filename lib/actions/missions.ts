@@ -5,9 +5,7 @@ import { missions, transportRequests, users, driverAvailabilities } from '@/lib/
 import { eq, and, gte, lte, sql, or } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { getCurrentUser } from '@/lib/auth';
-
-type MissionStatus = 'PROPOSED' | 'ACCEPTED' | 'DECLINED' | 'IN_PROGRESS' | 'COMPLETED';
-type AssignmentMethod = 'AUTO' | 'MANUAL';
+import { TransportType, MissionStatus, AssignmentMethod } from '@/types';
 
 interface CreateMissionData {
   transportRequestId: string;
@@ -147,6 +145,36 @@ export async function createMission(data: CreateMissionData) {
       .set({ status: 'ASSIGNED', updatedAt: new Date() })
       .where(eq(transportRequests.id, data.transportRequestId));
 
+    // Envoyer une notification email au chauffeur
+    try {
+      const { sendMissionAssignedEmail } = await import('@/lib/services/email-service');
+
+      const [requestDetails] = await db
+        .select({
+          request: transportRequests,
+          vip: users,
+        })
+        .from(transportRequests)
+        .leftJoin(users, eq(transportRequests.vipId, users.id))
+        .where(eq(transportRequests.id, data.transportRequestId))
+        .limit(1);
+
+      if (requestDetails && driver[0]) {
+        await sendMissionAssignedEmail({
+          driverEmail: driver[0].email,
+          driverName: `${driver[0].firstName || ''} ${driver[0].lastName || ''}`.trim() || driver[0].email,
+          vipName: requestDetails.vip ? `${requestDetails.vip.firstName || ''} ${requestDetails.vip.lastName || ''}`.trim() : 'VIP',
+          pickupAddress: requestDetails.request.pickupAddress,
+          dropoffAddress: requestDetails.request.dropoffAddress,
+          requestedDatetime: requestDetails.request.requestedDatetime,
+          missionId: mission.id,
+        });
+      }
+    } catch (emailError) {
+      console.error('Error sending email notification:', emailError);
+      // Don't fail the mission creation if email fails
+    }
+
     revalidatePath('/dashboard/missions');
     revalidatePath('/dashboard/transports');
     revalidatePath('/dashboard/my-missions');
@@ -244,6 +272,7 @@ export async function updateMissionStatus(data: UpdateMissionStatusData) {
 
 /**
  * Suggère des chauffeurs disponibles pour une demande de transport
+ * Utilise l'algorithme avancé d'affectation
  */
 export async function suggestDrivers(transportRequestId: string) {
   try {
@@ -269,94 +298,94 @@ export async function suggestDrivers(transportRequestId: string) {
       return { success: false, error: 'Demande de transport non trouvée', suggestions: [] };
     }
 
-    // Déterminer le créneau horaire
-    const requestDate = new Date(request.requestedDatetime);
-    requestDate.setHours(0, 0, 0, 0);
-    const requestHour = new Date(request.requestedDatetime).getHours();
+    // Utiliser l'algorithme avancé
+    const { suggestDriversForAssignment } = await import('@/lib/services/assignment-algorithm');
 
-    let slot: 'MORNING' | 'AFTERNOON' | 'EVENING' = 'MORNING';
-    if (requestHour >= 12 && requestHour < 18) {
-      slot = 'AFTERNOON';
-    } else if (requestHour >= 18) {
-      slot = 'EVENING';
-    }
-
-    // Récupérer tous les chauffeurs du festival
-    const drivers = await db
-      .select()
-      .from(users)
-      .where(
-        and(
-          eq(users.festivalId, userData.dbUser.festivalId),
-          eq(users.role, 'DRIVER')
-        )
-      );
-
-    // Récupérer les disponibilités pour cette date et ce créneau
-    const availabilities = await db
-      .select()
-      .from(driverAvailabilities)
-      .where(
-        and(
-          eq(driverAvailabilities.date, requestDate),
-          eq(driverAvailabilities.slot, slot),
-          eq(driverAvailabilities.isAvailable, true)
-        )
-      );
-
-    // Récupérer les missions existantes pour cette période
-    const existingMissions = await db
-      .select({
-        mission: missions,
-        request: transportRequests,
-      })
-      .from(missions)
-      .innerJoin(transportRequests, eq(missions.transportRequestId, transportRequests.id))
-      .where(
-        and(
-          sql`DATE(${transportRequests.requestedDatetime}) = ${requestDate.toISOString().split('T')[0]}`,
-          or(
-            eq(missions.status, 'ACCEPTED'),
-            eq(missions.status, 'IN_PROGRESS'),
-            eq(missions.status, 'PROPOSED')
-          )
-        )
-      );
-
-    // Calculer un score pour chaque chauffeur
-    const suggestions = drivers.map((driver) => {
-      let score = 0;
-      let reason = '';
-
-      // Vérifier la disponibilité
-      const isAvailable = availabilities.some((a) => a.driverId === driver.id);
-      if (isAvailable) {
-        score += 100;
-        reason = 'Disponible';
-      } else {
-        reason = 'Non disponible';
-      }
-
-      // Vérifier les missions existantes
-      const driverMissions = existingMissions.filter((m) => m.mission.driverId === driver.id);
-      score -= driverMissions.length * 10; // Pénalité pour chaque mission
-
-      return {
-        driver,
-        score,
-        reason,
-        isAvailable,
-        missionCount: driverMissions.length,
-      };
+    const driverScores = await suggestDriversForAssignment({
+      transportRequestId: request.id,
+      festivalId: request.festivalId,
+      requestedDatetime: request.requestedDatetime,
+      transportType: request.type as unknown as TransportType,
+      pickupLat: request.pickupLat,
+      pickupLng: request.pickupLng,
     });
 
-    // Trier par score décroissant
-    suggestions.sort((a, b) => b.score - a.score);
+    // Formater les résultats pour correspondre à l'ancien format
+    const suggestions = driverScores.map((ds) => ({
+      driver: {
+        id: ds.driver.id,
+        firstName: ds.driver.firstName,
+        lastName: ds.driver.lastName,
+        email: ds.driver.email,
+        phone: ds.driver.phone,
+      },
+      score: ds.score,
+      reason: ds.reason,
+      isAvailable: ds.isAvailable,
+      missionCount: ds.currentMissionCount,
+      distanceKm: ds.distanceKm,
+      breakdown: ds.breakdown,
+    }));
 
     return { success: true, suggestions };
   } catch (error) {
     console.error('Error suggesting drivers:', error);
     return { success: false, error: 'Erreur lors de la suggestion de chauffeurs', suggestions: [] };
+  }
+}
+
+/**
+ * Affecte automatiquement le meilleur chauffeur disponible
+ */
+export async function autoAssignDriver(transportRequestId: string) {
+  try {
+    const userData = await getCurrentUser();
+
+    if (!userData?.dbUser) {
+      return { success: false, error: 'Non autorisé' };
+    }
+
+    // Récupérer la demande de transport
+    const [request] = await db
+      .select()
+      .from(transportRequests)
+      .where(
+        and(
+          eq(transportRequests.id, transportRequestId),
+          eq(transportRequests.festivalId, userData.dbUser.festivalId)
+        )
+      )
+      .limit(1);
+
+    if (!request) {
+      return { success: false, error: 'Demande de transport non trouvée' };
+    }
+
+    // Utiliser l'algorithme d'affectation automatique
+    const { autoAssignBestDriver } = await import('@/lib/services/assignment-algorithm');
+
+    const result = await autoAssignBestDriver(
+      {
+        transportRequestId: request.id,
+        festivalId: request.festivalId,
+        requestedDatetime: request.requestedDatetime,
+        transportType: request.type as unknown as TransportType,
+        pickupLat: request.pickupLat,
+        pickupLng: request.pickupLng,
+      },
+      userData.dbUser.id
+    );
+
+    if (result.success) {
+      revalidatePath('/dashboard/missions');
+      revalidatePath('/dashboard/transports');
+      revalidatePath('/dashboard/my-missions');
+    }
+
+    return result;
+  } catch (error) {
+    console.error('Error auto-assigning driver:', error);
+    return { success: false, error: 'Erreur lors de l\'affectation automatique' };
   }
 }
 

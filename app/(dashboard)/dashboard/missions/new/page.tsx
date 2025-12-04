@@ -10,7 +10,7 @@ import { toast } from 'sonner';
 import { getTransportRequests } from '@/lib/actions/transports';
 import { suggestDrivers, createMission } from '@/lib/actions/missions';
 import type { transportRequests, users } from '@/lib/db/schema';
-import { RequestStatus } from '@/types';
+import { RequestStatus, AssignmentMethod } from '@/types';
 import {
   Select,
   SelectContent,
@@ -20,11 +20,25 @@ import {
 } from '@/components/ui/select';
 
 interface DriverSuggestion {
-  driver: typeof users.$inferSelect;
+  driver: {
+    id: string;
+    firstName: string | null;
+    lastName: string | null;
+    email: string;
+    phone: string | null;
+  };
   score: number;
   reason: string;
   isAvailable: boolean;
   missionCount: number;
+  distanceKm?: number;
+  breakdown?: {
+    availability: number;
+    proximity: number;
+    workload: number;
+    preferences: number;
+    performance: number;
+  };
 }
 
 export default function NewMissionPage() {
@@ -105,7 +119,7 @@ export default function NewMissionPage() {
       const result = await createMission({
         transportRequestId: selectedRequestId,
         driverId: selectedDriverId,
-        assignmentMethod: 'MANUAL',
+        assignmentMethod: AssignmentMethod.MANUAL,
         assignmentScore: selectedSuggestion?.score,
       });
 
@@ -338,9 +352,23 @@ export default function NewMissionPage() {
                             <div className="text-sm text-muted-foreground">
                               {suggestion.missionCount} missions ce jour
                             </div>
-                            <div className="text-xs text-muted-foreground">
+                            {suggestion.distanceKm !== undefined && (
+                              <div className="text-xs text-muted-foreground">
+                                Distance: {suggestion.distanceKm.toFixed(1)} km
+                              </div>
+                            )}
+                            <div className="text-xs font-semibold text-purple-600">
                               Score: {suggestion.score}
                             </div>
+                            {suggestion.breakdown && (
+                              <div className="text-xs text-muted-foreground mt-1 space-y-0.5">
+                                <div>Disponibilité: +{suggestion.breakdown.availability}</div>
+                                <div>Proximité: +{suggestion.breakdown.proximity}</div>
+                                <div>Charge: {suggestion.breakdown.workload}</div>
+                                <div>Préférences: +{suggestion.breakdown.preferences}</div>
+                                <div>Performance: +{suggestion.breakdown.performance}</div>
+                              </div>
+                            )}
                           </div>
                         </div>
                       </div>

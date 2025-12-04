@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { getMyMissions, updateMissionStatus } from '@/lib/actions/missions';
 import type { missions, transportRequests } from '@/lib/db/schema';
+import { MissionStatus } from '@/types';
 import {
   Dialog,
   DialogContent,
@@ -18,8 +19,6 @@ import {
 } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-
-type MissionStatus = 'PROPOSED' | 'ACCEPTED' | 'DECLINED' | 'IN_PROGRESS' | 'COMPLETED';
 
 interface MissionWithRequest {
   mission: typeof missions.$inferSelect;
@@ -76,7 +75,7 @@ export default function MyMissionsPage() {
     try {
       const result = await updateMissionStatus({
         missionId: mission.mission.id,
-        status: 'ACCEPTED',
+        status: MissionStatus.ACCEPTED,
       });
 
       if (result.success) {
@@ -110,7 +109,7 @@ export default function MyMissionsPage() {
     try {
       const result = await updateMissionStatus({
         missionId: selectedMission.mission.id,
-        status: 'DECLINED',
+        status: MissionStatus.DECLINED,
         declinedReason: declineReason,
       });
 
@@ -133,7 +132,7 @@ export default function MyMissionsPage() {
     try {
       const result = await updateMissionStatus({
         missionId: mission.mission.id,
-        status: 'IN_PROGRESS',
+        status: MissionStatus.IN_PROGRESS,
       });
 
       if (result.success) {
@@ -154,7 +153,7 @@ export default function MyMissionsPage() {
     try {
       const result = await updateMissionStatus({
         missionId: mission.mission.id,
-        status: 'COMPLETED',
+        status: MissionStatus.COMPLETED,
       });
 
       if (result.success) {

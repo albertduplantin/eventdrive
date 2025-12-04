@@ -10,6 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { getMissions } from '@/lib/actions/missions';
 import type { missions, transportRequests, users } from '@/lib/db/schema';
+import { MissionStatus } from '@/types';
 import {
   Select,
   SelectContent,
@@ -17,8 +18,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-
-type MissionStatus = 'PROPOSED' | 'ACCEPTED' | 'DECLINED' | 'IN_PROGRESS' | 'COMPLETED';
 
 interface MissionWithDetails {
   mission: typeof missions.$inferSelect;
@@ -63,7 +62,7 @@ export default function MissionsPage() {
     setIsLoading(true);
     try {
       const result = await getMissions({
-        status: statusFilter === 'ALL' ? undefined : statusFilter,
+        status: statusFilter === 'ALL' ? undefined : statusFilter as unknown as MissionStatus,
       });
 
       if (result.success) {

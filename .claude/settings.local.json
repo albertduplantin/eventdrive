@@ -26,7 +26,14 @@
       "Bash(git add:*)",
       "Bash(git remote add:*)",
       "Bash(git branch:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(vercel --version:*)",
+      "Bash(vercel whoami:*)",
+      "Bash(vercel link:*)",
+      "Bash(vercel env add:*)",
+      "Bash(vercel env:*)",
+      "Bash(vercel --prod:*)",
+      "Bash(vercel inspect:*)"
     ],
     "deny": [],
     "ask": []

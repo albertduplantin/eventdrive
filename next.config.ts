@@ -4,7 +4,6 @@ const nextConfig: NextConfig = {
   /* config options here */
   reactCompiler: true,
   experimental: {
-    // Exclude specific pages from static generation
     serverActions: {
       bodySizeLimit: '2mb',
     },

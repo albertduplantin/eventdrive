@@ -3,6 +3,9 @@ import { getCurrentUser } from '@/lib/auth';
 import { DashboardSidebar } from '@/components/features/dashboard-sidebar';
 import { DashboardHeader } from '@/components/features/dashboard-header';
 
+// Force all dashboard pages to be dynamic
+export const dynamic = 'force-dynamic';
+
 export default async function DashboardLayout({
   children,
 }: {

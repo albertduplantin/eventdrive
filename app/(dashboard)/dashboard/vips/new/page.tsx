@@ -31,7 +31,7 @@ export default function NewVipPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.firstName || !formData.lastName || !formData.email) {
+    if (!formData.firstName || !formData.lastName) {
       toast.error('Veuillez remplir tous les champs obligatoires');
       return;
     }
@@ -50,13 +50,13 @@ export default function NewVipPage() {
       });
 
       if (result.success) {
-        toast.success('VIP cr�� avec succ�s');
+        toast.success('VIP cree avec succes');
         router.push('/dashboard/vips');
       } else {
-        toast.error(result.error || 'Erreur lors de la cr�ation');
+        toast.error(result.error || 'Erreur lors de la creation');
       }
     } catch (error) {
-      toast.error('Erreur lors de la cr�ation');
+      toast.error('Erreur lors de la creation');
     } finally {
       setIsSubmitting(false);
     }
@@ -78,7 +78,7 @@ export default function NewVipPage() {
             Nouveau VIP
           </h1>
           <p className="text-muted-foreground mt-1">
-            Ajoutez un nouveau VIP � votre festival
+            Ajoutez un nouveau VIP a votre festival
           </p>
         </div>
       </div>
@@ -98,7 +98,7 @@ export default function NewVipPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="firstName">
-                  Pr�nom <span className="text-red-500">*</span>
+                  Prenom <span className="text-red-500">*</span>
                 </Label>
                 <Input
                   id="firstName"
@@ -125,22 +125,19 @@ export default function NewVipPage() {
 
             {/* Email */}
             <div className="space-y-2">
-              <Label htmlFor="email">
-                Email <span className="text-red-500">*</span>
-              </Label>
+              <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
                 type="email"
                 value={formData.email}
                 onChange={(e) => handleChange('email', e.target.value)}
                 placeholder="marie.martin@example.com"
-                required
               />
             </div>
 
             {/* Phone */}
             <div className="space-y-2">
-              <Label htmlFor="phone">T�l�phone</Label>
+              <Label htmlFor="phone">Telephone</Label>
               <Input
                 id="phone"
                 type="tel"
@@ -150,14 +147,47 @@ export default function NewVipPage() {
               />
             </div>
 
-            {/* Address */}
+            {/* Organization */}
             <div className="space-y-2">
-              <Label htmlFor="address">Adresse</Label>
+              <Label htmlFor="organization">Organisation</Label>
               <Input
-                id="address"
-                value={formData.address}
-                onChange={(e) => handleChange('address', e.target.value)}
-                placeholder="456 Avenue des Champs-�lys�es, 75008 Paris"
+                id="organization"
+                value={formData.organization}
+                onChange={(e) => handleChange('organization', e.target.value)}
+                placeholder="Nom de l'entreprise"
+              />
+            </div>
+
+            {/* Title */}
+            <div className="space-y-2">
+              <Label htmlFor="title">Titre / Fonction</Label>
+              <Input
+                id="title"
+                value={formData.title}
+                onChange={(e) => handleChange('title', e.target.value)}
+                placeholder="PDG, Directeur"
+              />
+            </div>
+
+            {/* Category */}
+            <div className="space-y-2">
+              <Label htmlFor="category">Categorie</Label>
+              <Input
+                id="category"
+                value={formData.category}
+                onChange={(e) => handleChange('category', e.target.value)}
+                placeholder="Artiste, Sponsor, Presse"
+              />
+            </div>
+
+            {/* Notes */}
+            <div className="space-y-2">
+              <Label htmlFor="notes">Notes</Label>
+              <Input
+                id="notes"
+                value={formData.notes}
+                onChange={(e) => handleChange('notes', e.target.value)}
+                placeholder="Informations additionnelles"
               />
             </div>
 
@@ -169,7 +199,7 @@ export default function NewVipPage() {
                 className="flex-1"
               >
                 <Save className="h-4 w-4 mr-2" />
-                {isSubmitting ? 'Cr�ation...' : 'Cr�er le VIP'}
+                {isSubmitting ? 'Creation...' : 'Creer le VIP'}
               </Button>
               <Button
                 type="button"
@@ -188,7 +218,7 @@ export default function NewVipPage() {
       <Card className="p-4 bg-amber-50 border-amber-200">
         <p className="text-sm text-amber-700">
           <strong>Note :</strong> Le VIP recevra un email d'invitation pour
-          acc�der � son espace personnel et suivre ses transports.
+          acceder a son espace personnel et suivre ses transports.
         </p>
       </Card>
     </div>

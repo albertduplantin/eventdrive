@@ -74,7 +74,7 @@ export default function NewVipPage() {
           <ArrowLeft className="h-5 w-5" />
         </Button>
         <div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-700 to-gray-700 bg-clip-text text-transparent">
+          <h1 className="text-3xl font-bold text-black">
             Nouveau VIP
           </h1>
           <p className="text-muted-foreground mt-1">

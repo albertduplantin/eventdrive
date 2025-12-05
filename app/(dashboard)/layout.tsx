@@ -24,7 +24,7 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-slate-50/50 via-gray-50/30 to-blue-50/40">
+    <div className="flex min-h-screen bg-gray-50">
       {/* Sidebar */}
       <DashboardSidebar user={userData.dbUser} />
 

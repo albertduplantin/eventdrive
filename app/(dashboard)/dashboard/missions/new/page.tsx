@@ -186,7 +186,7 @@ export default function NewMissionPage() {
           <ArrowLeft className="h-4 w-4" />
         </Button>
         <div className="flex-1">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-700 to-gray-700 bg-clip-text text-transparent">
+          <h1 className="text-3xl font-bold text-black">
             Nouvelle Affectation
           </h1>
           <p className="text-muted-foreground mt-1">

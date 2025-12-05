@@ -105,7 +105,7 @@ export default function HistoryPage() {
     <div className="p-8 space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-700 to-gray-700 bg-clip-text text-transparent">
+        <h1 className="text-3xl font-bold text-black">
           Historique des activites
         </h1>
         <p className="text-muted-foreground mt-1">
@@ -223,13 +223,13 @@ export default function HistoryPage() {
       )}
 
       {/* Info Message */}
-      <Card className="bg-slate-50 border-slate-200">
+      <Card className="bg-white border-gray-200">
         <CardContent className="pt-6">
           <div className="flex items-start gap-3">
-            <History className="h-5 w-5 text-slate-600 mt-0.5" />
+            <History className="h-5 w-5 text-gray-600 mt-0.5" />
             <div>
-              <h3 className="font-semibold text-slate-900">Historique complet</h3>
-              <p className="text-sm text-slate-700 mt-1">
+              <h3 className="font-semibold text-black">Historique complet</h3>
+              <p className="text-sm text-gray-700 mt-1">
                 L'historique affiche actuellement des donnees de demonstration. La connexion
                 avec la base de donnees pour afficher l'historique reel sera implementee prochainement.
               </p>

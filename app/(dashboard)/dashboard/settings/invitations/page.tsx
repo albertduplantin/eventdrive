@@ -137,7 +137,7 @@ export default function InvitationsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent">
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-700 to-gray-700 bg-clip-text text-transparent">
             Codes d'invitation
           </h1>
           <p className="text-muted-foreground mt-1">
@@ -152,7 +152,7 @@ export default function InvitationsPage() {
 
       {/* Create Form */}
       {showCreateForm && (
-        <Card className="border-purple-200 bg-purple-50/50">
+        <Card className="border-slate-200 bg-slate-50/50">
           <CardHeader>
             <CardTitle>Creer un code d'invitation</CardTitle>
             <CardDescription>
@@ -238,7 +238,7 @@ export default function InvitationsPage() {
                     <div className="flex-1 space-y-2">
                       {/* Code */}
                       <div className="flex items-center gap-2">
-                        <code className="text-lg font-mono font-bold bg-purple-100 px-3 py-1 rounded">
+                        <code className="text-lg font-mono font-bold bg-slate-100 px-3 py-1 rounded">
                           {invitation.code}
                         </code>
                         <Button

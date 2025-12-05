@@ -141,9 +141,9 @@ export function OnboardingFormWithInvitation({ userInfo }: OnboardingFormProps) 
   };
 
   return (
-    <Card className="border-none shadow-2xl bg-gradient-to-br from-white via-orange-50/30 to-amber-50/30 backdrop-blur-sm">
+    <Card className="border-none shadow-2xl bg-gradient-to-br from-white via-slate-50/30 to-gray-50/30 backdrop-blur-sm">
       <CardHeader className="space-y-1 pb-6">
-        <CardTitle className="text-2xl font-bold bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent">
+        <CardTitle className="text-2xl font-bold bg-gradient-to-r from-slate-700 to-gray-700 bg-clip-text text-transparent">
           Bienvenue sur FestivalDrive
         </CardTitle>
         <CardDescription className="text-base">
@@ -165,12 +165,12 @@ export function OnboardingFormWithInvitation({ userInfo }: OnboardingFormProps) 
 
           {/* Join with invitation code */}
           <TabsContent value="join" className="space-y-4">
-            <div className="space-y-4 p-4 rounded-lg bg-orange-50/50 border border-orange-200">
+            <div className="space-y-4 p-4 rounded-lg bg-slate-50/50 border border-slate-200">
               <div className="flex items-start gap-3">
-                <Ticket className="h-5 w-5 text-orange-600 mt-0.5" />
+                <Ticket className="h-5 w-5 text-slate-600 mt-0.5" />
                 <div>
-                  <h3 className="font-semibold text-orange-900">Code d'invitation</h3>
-                  <p className="text-sm text-orange-700 mt-1">
+                  <h3 className="font-semibold text-slate-900">Code d'invitation</h3>
+                  <p className="text-sm text-slate-600 mt-1">
                     Entrez le code fourni par l'administrateur du festival
                   </p>
                 </div>
@@ -227,7 +227,7 @@ export function OnboardingFormWithInvitation({ userInfo }: OnboardingFormProps) 
                 />
                 <Button
                   type="submit"
-                  className="w-full h-12 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600"
+                  className="w-full h-12 bg-gradient-to-r from-slate-600 to-gray-600 hover:from-slate-700 hover:to-gray-700"
                   disabled={isLoading}
                 >
                   {isLoading ? 'Creation en cours...' : `Rejoindre ${validatedInvitation.festivalName}`}
@@ -238,12 +238,12 @@ export function OnboardingFormWithInvitation({ userInfo }: OnboardingFormProps) 
 
           {/* Create new festival */}
           <TabsContent value="create" className="space-y-4">
-            <div className="space-y-4 p-4 rounded-lg bg-amber-50/50 border border-amber-200">
+            <div className="space-y-4 p-4 rounded-lg bg-blue-50/50 border border-blue-200">
               <div className="flex items-start gap-3">
-                <Plus className="h-5 w-5 text-amber-600 mt-0.5" />
+                <Plus className="h-5 w-5 text-blue-600 mt-0.5" />
                 <div>
-                  <h3 className="font-semibold text-amber-900">Nouveau festival</h3>
-                  <p className="text-sm text-amber-700 mt-1">
+                  <h3 className="font-semibold text-blue-900">Nouveau festival</h3>
+                  <p className="text-sm text-blue-600 mt-1">
                     Creez votre propre festival et invitez votre equipe
                   </p>
                 </div>
@@ -273,7 +273,7 @@ export function OnboardingFormWithInvitation({ userInfo }: OnboardingFormProps) 
 
               <Button
                 type="submit"
-                className="w-full h-12 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600"
+                className="w-full h-12 bg-gradient-to-r from-slate-600 to-gray-600 hover:from-slate-700 hover:to-gray-700"
                 disabled={isLoading}
               >
                 {isLoading ? 'Creation en cours...' : 'Creer mon festival'}

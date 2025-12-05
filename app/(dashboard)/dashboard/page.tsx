@@ -1,10 +1,11 @@
 import { getCurrentUser } from '@/lib/auth';
 import { db } from '@/lib/db';
-import { transportRequests, missions, users } from '@/lib/db/schema';
+import { transportRequests, missions, users, vips } from '@/lib/db/schema';
 import { eq, and, count, sql } from 'drizzle-orm';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Users, Car, MapPin, CheckCircle, Clock, AlertCircle } from 'lucide-react';
 import { UserRole } from '@/types';
+import { DashboardStats } from '@/components/dashboard-stats';
 
 export default async function DashboardPage() {
   const userData = await getCurrentUser();
@@ -159,6 +160,9 @@ export default async function DashboardPage() {
         </Card>
       </div>
 
+      {/* Statistics */}
+      <DashboardStats stats={stats} />
+
       {/* Quick Actions based on role */}
       {userRole && (
         <Card>
@@ -200,8 +204,8 @@ async function getStats(festivalId: string, role: UserRole) {
     // Count VIPs
     db
       .select({ count: count() })
-      .from(users)
-      .where(and(eq(users.festivalId, festivalId), eq(users.role, 'VIP'))),
+      .from(vips)
+      .where(eq(vips.festivalId, festivalId)),
 
     // Count Drivers
     db

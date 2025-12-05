@@ -2,6 +2,8 @@ import { redirect } from 'next/navigation';
 import { getCurrentUser } from '@/lib/auth';
 import { OnboardingForm } from '@/components/features/onboarding-form';
 
+export const dynamic = 'force-dynamic';
+
 export default async function OnboardingPage() {
   const userData = await getCurrentUser();
 

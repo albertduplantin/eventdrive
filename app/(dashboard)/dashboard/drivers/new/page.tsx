@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -44,13 +44,13 @@ export default function NewDriverPage() {
       });
 
       if (result.success) {
-        toast.success('Chauffeur cr�� avec succ�s');
+        toast.success('Chauffeur cree avec succes');
         router.push('/dashboard/drivers');
       } else {
-        toast.error(result.error || 'Erreur lors de la cr�ation');
+        toast.error(result.error || 'Erreur lors de la creation');
       }
     } catch (error) {
-      toast.error('Erreur lors de la cr�ation');
+      toast.error('Erreur lors de la creation');
     } finally {
       setIsSubmitting(false);
     }
@@ -69,10 +69,10 @@ export default function NewDriverPage() {
         </Button>
         <div>
           <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-            Nouveau chauffeur
+            Nouveau Chauffeur
           </h1>
           <p className="text-muted-foreground mt-1">
-            Ajoutez un nouveau chauffeur � votre �quipe
+            Ajoutez un nouveau chauffeur a votre equipe
           </p>
         </div>
       </div>
@@ -92,7 +92,7 @@ export default function NewDriverPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="firstName">
-                  Pr�nom <span className="text-red-500">*</span>
+                  Prenom <span className="text-red-500">*</span>
                 </Label>
                 <Input
                   id="firstName"
@@ -134,7 +134,7 @@ export default function NewDriverPage() {
 
             {/* Phone */}
             <div className="space-y-2">
-              <Label htmlFor="phone">T�l�phone</Label>
+              <Label htmlFor="phone">Telephone</Label>
               <Input
                 id="phone"
                 type="tel"
@@ -151,7 +151,7 @@ export default function NewDriverPage() {
                 id="address"
                 value={formData.address}
                 onChange={(e) => handleChange('address', e.target.value)}
-                placeholder="123 Rue de la Paix, 75001 Paris"
+                placeholder="123 Rue de la Paix, Paris"
               />
             </div>
 
@@ -163,7 +163,7 @@ export default function NewDriverPage() {
                 className="flex-1"
               >
                 <Save className="h-4 w-4 mr-2" />
-                {isSubmitting ? 'Cr�ation...' : 'Cr�er le chauffeur'}
+                {isSubmitting ? 'Creation...' : 'Creer le chauffeur'}
               </Button>
               <Button
                 type="button"
@@ -182,7 +182,7 @@ export default function NewDriverPage() {
       <Card className="p-4 bg-blue-50 border-blue-200">
         <p className="text-sm text-blue-700">
           <strong>Note :</strong> Le chauffeur recevra un email d'invitation pour
-          cr�er son compte et acc�der � l'application mobile.
+          acceder a son espace personnel et voir ses missions.
         </p>
       </Card>
     </div>

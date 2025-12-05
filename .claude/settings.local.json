@@ -41,7 +41,8 @@
       "Bash(git restore:*)",
       "Bash(npm update:*)",
       "Bash(npm audit:*)",
-      "Bash(powershell -Command:*)"
+      "Bash(powershell -Command:*)",
+      "Bash(npm uninstall:*)"
     ],
     "deny": [],
     "ask": []

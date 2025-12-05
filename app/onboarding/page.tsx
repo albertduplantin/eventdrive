@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 import { getCurrentUser } from '@/lib/auth';
-import { OnboardingForm } from '@/components/features/onboarding-form';
+import { OnboardingFormWithInvitation } from '@/components/features/onboarding-form-with-invitation';
 
 export const dynamic = 'force-dynamic';
 
@@ -38,7 +38,7 @@ export default async function OnboardingPage() {
             ✨ Configurez votre compte pour commencer à gérer vos transports VIP
           </p>
         </div>
-        <OnboardingForm userInfo={userInfo} />
+        <OnboardingFormWithInvitation userInfo={userInfo} />
       </div>
     </div>
   );

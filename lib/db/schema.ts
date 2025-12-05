@@ -344,6 +344,37 @@ export const auditLogs = pgTable('audit_logs', {
   entityIdx: index('audit_entity_idx').on(table.entityType, table.entityId),
 }));
 
+// Festival Invitations
+export const festivalInvitations = pgTable('festival_invitations', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  festivalId: uuid('festival_id').references(() => festivals.id, { onDelete: 'cascade' }).notNull(),
+
+  // Invitation code (unique, ex: DINAN2025-ABC123)
+  code: varchar('code', { length: 50 }).notNull().unique(),
+
+  // Optional: restrict to specific role
+  role: userRoleEnum('role'),
+
+  // Optional: single-use or multi-use
+  maxUses: integer('max_uses').default(0), // 0 = unlimited
+  usedCount: integer('used_count').default(0).notNull(),
+
+  // Created by
+  createdBy: uuid('created_by').references(() => users.id, { onDelete: 'set null' }),
+
+  // Expiration
+  expiresAt: timestamp('expires_at'),
+
+  // Status
+  isActive: boolean('is_active').default(true).notNull(),
+
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+}, (table) => ({
+  festivalIdIdx: index('invitation_festival_id_idx').on(table.festivalId),
+  codeIdx: index('invitation_code_idx').on(table.code),
+}));
+
 // ============================================
 // RELATIONS
 // ============================================
@@ -354,6 +385,7 @@ export const festivalsRelations = relations(festivals, ({ many }) => ({
   transportRequests: many(transportRequests),
   driverAvailabilities: many(driverAvailabilities),
   auditLogs: many(auditLogs),
+  invitations: many(festivalInvitations),
 }));
 
 export const vipsRelations = relations(vips, ({ one }) => ({

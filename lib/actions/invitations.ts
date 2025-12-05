@@ -132,7 +132,7 @@ export async function validateInvitationCode(code: string) {
     }
 
     // Check max uses
-    if (invitation.maxUses > 0 && invitation.usedCount >= invitation.maxUses) {
+    if (invitation.maxUses && invitation.maxUses > 0 && invitation.usedCount >= invitation.maxUses) {
       return { success: false, error: 'Ce code d\'invitation a atteint sa limite d\'utilisation' };
     }
 

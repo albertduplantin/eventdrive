@@ -124,7 +124,7 @@ export default function DriverProfilePage() {
           <ArrowLeft className="h-5 w-5" />
         </Button>
         <div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent">
             Profil Chauffeur
           </h1>
           <p className="text-muted-foreground mt-1">
@@ -145,7 +145,7 @@ export default function DriverProfilePage() {
                 className="w-24 h-24 rounded-full object-cover"
               />
             ) : (
-              <div className="w-24 h-24 rounded-full bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center">
+              <div className="w-24 h-24 rounded-full bg-gradient-to-br from-orange-600 to-amber-600 flex items-center justify-center">
                 <span className="text-white text-3xl font-bold">
                   {getInitials(driver.firstName || '', driver.lastName || '')}
                 </span>

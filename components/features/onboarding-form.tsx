@@ -98,7 +98,7 @@ export function OnboardingForm({ userInfo }: OnboardingFormProps) {
   return (
     <Card className="border-none shadow-2xl bg-gradient-to-br from-white via-purple-50/30 to-blue-50/30 backdrop-blur-sm">
       <CardHeader className="space-y-1 pb-6">
-        <CardTitle className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+        <CardTitle className="text-2xl font-bold bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent">
           Informations du profil
         </CardTitle>
         <CardDescription className="text-base">
@@ -251,7 +251,7 @@ export function OnboardingForm({ userInfo }: OnboardingFormProps) {
 
           <Button
             type="submit"
-            className="w-full h-12 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all transform hover:scale-[1.02]"
+            className="w-full h-12 bg-gradient-to-r from-orange-600 to-amber-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all transform hover:scale-[1.02]"
             disabled={isLoading}
           >
             {isLoading ? '✨ Création en cours...' : '🚀 Créer mon profil'}

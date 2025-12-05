@@ -91,7 +91,7 @@ export function VipFormDialog({ open, onOpenChange, vip, onSuccess }: VipFormDia
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+          <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent">
             {isEditing ? 'Modifier le VIP' : 'Ajouter un VIP'}
           </DialogTitle>
           <DialogDescription>
@@ -222,7 +222,7 @@ export function VipFormDialog({ open, onOpenChange, vip, onSuccess }: VipFormDia
             <Button
               type="submit"
               disabled={isLoading}
-              className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
+              className="bg-gradient-to-r from-orange-600 to-amber-600 hover:from-purple-700 hover:to-blue-700"
             >
               {isLoading
                 ? isEditing

@@ -99,11 +99,11 @@ export function DashboardSidebar({ user }: DashboardSidebarProps) {
       {/* Logo */}
       <div className="flex h-20 items-center px-6 border-b border-purple-100/20">
         <Link href="/dashboard" className="flex items-center gap-3 group" onClick={() => setIsMobileMenuOpen(false)}>
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-purple-600 to-blue-600 shadow-lg group-hover:shadow-xl transition-shadow">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-orange-600 to-amber-600 shadow-lg group-hover:shadow-xl transition-shadow">
             <MapPin className="h-6 w-6 text-white" />
           </div>
           <div>
-            <span className="text-xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+            <span className="text-xl font-bold bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent">
               FestivalDrive
             </span>
             <p className="text-xs text-gray-500">Gestion VIP</p>
@@ -125,7 +125,7 @@ export function DashboardSidebar({ user }: DashboardSidebarProps) {
               className={cn(
                 'flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-all',
                 isActive
-                  ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg shadow-purple-500/30'
+                  ? 'bg-gradient-to-r from-orange-600 to-amber-600 text-white shadow-lg shadow-orange-500/30'
                   : 'text-gray-700 hover:bg-purple-50 hover:text-purple-700'
               )}
             >
@@ -138,9 +138,9 @@ export function DashboardSidebar({ user }: DashboardSidebarProps) {
 
       {/* User Role Badge */}
       <div className="p-4 border-t border-purple-100/20">
-        <div className="rounded-xl bg-gradient-to-br from-purple-50 to-blue-50 border-2 border-purple-200 p-4">
+        <div className="rounded-xl bg-gradient-to-br from-orange-50 to-amber-50 border-2 border-orange-200 p-4">
           <p className="text-xs font-medium text-purple-600 mb-1">Votre rôle</p>
-          <p className="text-sm font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+          <p className="text-sm font-bold bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent">
             {getRoleLabel(userRole)}
           </p>
           {user?.firstName && (
@@ -158,7 +158,7 @@ export function DashboardSidebar({ user }: DashboardSidebarProps) {
       {/* Mobile Menu Button */}
       <button
         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        className="lg:hidden fixed top-4 left-4 z-50 flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-purple-600 to-blue-600 text-white shadow-lg"
+        className="lg:hidden fixed top-4 left-4 z-50 flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-orange-600 to-amber-600 text-white shadow-lg"
       >
         {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
       </button>

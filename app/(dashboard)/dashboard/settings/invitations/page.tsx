@@ -242,7 +242,7 @@ export default function InvitationsPage() {
                           {invitation.code}
                         </code>
                         <Button
-                          variant="ghost"
+                          variant="outline"
                           size="sm"
                           onClick={() => handleCopyCode(invitation.code)}
                         >
@@ -253,7 +253,7 @@ export default function InvitationsPage() {
                           )}
                         </Button>
                         <Button
-                          variant="ghost"
+                          variant="outline"
                           size="sm"
                           onClick={() => handleCopyLink(invitation.code)}
                         >
@@ -284,11 +284,12 @@ export default function InvitationsPage() {
                     {/* Actions */}
                     {invitation.isActive && !isExpired && !isMaxedOut && (
                       <Button
-                        variant="ghost"
+                        variant="outline"
                         size="sm"
+                        className="border-2 border-red-200 hover:bg-red-50 hover:border-red-300"
                         onClick={() => handleDeactivate(invitation.id)}
                       >
-                        <Trash2 className="h-4 w-4 text-destructive" />
+                        <Trash2 className="h-4 w-4 text-red-600" />
                       </Button>
                     )}
                   </div>

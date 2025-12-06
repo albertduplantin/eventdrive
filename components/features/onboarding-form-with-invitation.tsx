@@ -219,7 +219,7 @@ export function OnboardingFormWithInvitation({ userInfo }: OnboardingFormProps) 
                     </div>
                   </div>
                   <Button
-                    variant="ghost"
+                    variant="outline"
                     size="sm"
                     onClick={() => {
                       setValidatedInvitation(null);

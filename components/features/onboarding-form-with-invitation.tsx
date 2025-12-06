@@ -55,7 +55,10 @@ export function OnboardingFormWithInvitation({ userInfo }: OnboardingFormProps) 
   const [validatedInvitation, setValidatedInvitation] = useState<any>(null);
   const [isValidating, setIsValidating] = useState(false);
   const [createNewFestival, setCreateNewFestival] = useState(false);
+
+  // Force "join" tab if invitation code is present in URL
   const [activeTab, setActiveTab] = useState<string>(inviteCode ? 'join' : 'create');
+  const hasInviteCode = !!inviteCode;
 
   const {
     register,
@@ -67,7 +70,8 @@ export function OnboardingFormWithInvitation({ userInfo }: OnboardingFormProps) 
     defaultValues: {
       firstName: userInfo?.firstName || '',
       lastName: userInfo?.lastName || '',
-      role: UserRole.VIP,
+      // Default role: FESTIVAL_ADMIN for new festivals, VIP for invitations
+      role: hasInviteCode ? UserRole.VIP : UserRole.FESTIVAL_ADMIN,
     },
   });
 
@@ -152,16 +156,28 @@ export function OnboardingFormWithInvitation({ userInfo }: OnboardingFormProps) 
       </CardHeader>
       <CardContent>
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="join" className="gap-2">
-              <Ticket className="h-4 w-4" />
-              Rejoindre un festival
-            </TabsTrigger>
-            <TabsTrigger value="create" className="gap-2">
-              <Plus className="h-4 w-4" />
-              Creer un festival
-            </TabsTrigger>
-          </TabsList>
+          {/* Only show tabs if no invitation code in URL */}
+          {!hasInviteCode && (
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="join" className="gap-2">
+                <Ticket className="h-4 w-4" />
+                Rejoindre un festival
+              </TabsTrigger>
+              <TabsTrigger value="create" className="gap-2">
+                <Plus className="h-4 w-4" />
+                Creer un festival
+              </TabsTrigger>
+            </TabsList>
+          )}
+
+          {/* Show message if invitation code present */}
+          {hasInviteCode && (
+            <div className="mb-4 p-3 rounded-lg bg-gray-100 border border-gray-300">
+              <p className="text-sm text-gray-700 text-center">
+                Vous avez ete invite a rejoindre un festival. Veuillez valider votre code d'invitation ci-dessous.
+              </p>
+            </div>
+          )}
 
           {/* Join with invitation code */}
           <TabsContent value="join" className="space-y-4">
@@ -224,6 +240,7 @@ export function OnboardingFormWithInvitation({ userInfo }: OnboardingFormProps) 
                   errors={errors}
                   userInfo={userInfo}
                   disableRole={!!validatedInvitation.role}
+                  isCreatingFestival={false}
                 />
                 <Button
                   type="submit"
@@ -269,6 +286,7 @@ export function OnboardingFormWithInvitation({ userInfo }: OnboardingFormProps) 
                 errors={errors}
                 userInfo={userInfo}
                 disableRole={false}
+                isCreatingFestival={true}
               />
 
               <Button
@@ -293,6 +311,7 @@ function UserInfoFields({
   errors,
   userInfo,
   disableRole,
+  isCreatingFestival = false,
 }: any) {
   return (
     <>
@@ -301,19 +320,28 @@ function UserInfoFields({
         <Label htmlFor="role">Role</Label>
         <Select
           onValueChange={(value) => setValue('role', value as UserRole)}
-          defaultValue={UserRole.VIP}
+          defaultValue={isCreatingFestival ? UserRole.FESTIVAL_ADMIN : UserRole.VIP}
           disabled={disableRole}
         >
           <SelectTrigger>
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value={UserRole.FESTIVAL_ADMIN}>Administrateur Festival</SelectItem>
-            <SelectItem value={UserRole.GENERAL_COORDINATOR}>Coordinateur General</SelectItem>
-            <SelectItem value={UserRole.VIP_MANAGER}>Responsable VIP</SelectItem>
-            <SelectItem value={UserRole.DRIVER_MANAGER}>Responsable Chauffeurs</SelectItem>
-            <SelectItem value={UserRole.DRIVER}>Chauffeur</SelectItem>
-            <SelectItem value={UserRole.VIP}>VIP</SelectItem>
+            {/* Only show admin roles when creating a festival */}
+            {isCreatingFestival ? (
+              <>
+                <SelectItem value={UserRole.FESTIVAL_ADMIN}>Administrateur Festival</SelectItem>
+                <SelectItem value={UserRole.GENERAL_COORDINATOR}>Coordinateur General</SelectItem>
+              </>
+            ) : (
+              <>
+                {/* Show all roles when joining via invitation */}
+                <SelectItem value={UserRole.VIP_MANAGER}>Responsable VIP</SelectItem>
+                <SelectItem value={UserRole.DRIVER_MANAGER}>Responsable Chauffeurs</SelectItem>
+                <SelectItem value={UserRole.DRIVER}>Chauffeur</SelectItem>
+                <SelectItem value={UserRole.VIP}>VIP</SelectItem>
+              </>
+            )}
           </SelectContent>
         </Select>
         {errors.role && (

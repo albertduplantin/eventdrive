@@ -186,7 +186,3 @@ export async function getLocationHistory(missionId: string, limit: number = 100)
     return { success: false, error: 'Erreur lors de la récupération de l\'historique', history: [] };
   }
 }
-
-// Les fonctions utilitaires de calcul ont été déplacées vers lib/tracking-utils.ts
-// pour éviter les erreurs avec 'use server' qui exige que toutes les fonctions exportées soient async
-export { calculateDistance, estimateETA, formatETA } from '@/lib/tracking-utils';

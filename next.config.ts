@@ -22,6 +22,8 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  // Disable static export to avoid build issues with Clerk in Next.js 16
+  output: undefined,
 };
 
 export default nextConfig;

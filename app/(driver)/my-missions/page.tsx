@@ -403,7 +403,7 @@ export default function MyMissionsPage() {
                         )}
                       </div>
 
-                      <div className="flex items-center gap-3 pt-4 border-t">
+                      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-4 border-t">
                         <Button
                           onClick={() => handleStart(item)}
                           disabled={isUpdating}
@@ -411,6 +411,14 @@ export default function MyMissionsPage() {
                         >
                           <Play className="h-4 w-4 mr-2" />
                           Démarrer la mission
+                        </Button>
+                        <Button
+                          onClick={() => window.location.href = `/my-missions/${item.mission.id}/track`}
+                          variant="outline"
+                          className="border-blue-300 text-blue-700 hover:bg-blue-50"
+                        >
+                          <MapPin className="h-4 w-4 mr-2" />
+                          Activer le GPS
                         </Button>
                       </div>
                     </div>

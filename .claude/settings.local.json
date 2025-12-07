@@ -42,7 +42,8 @@
       "Bash(npm update:*)",
       "Bash(npm audit:*)",
       "Bash(powershell -Command:*)",
-      "Bash(npm uninstall:*)"
+      "Bash(npm uninstall:*)",
+      "Bash(npm run type-check:*)"
     ],
     "deny": [],
     "ask": []

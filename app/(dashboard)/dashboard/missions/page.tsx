@@ -301,6 +301,24 @@ export default function MissionsPage() {
                     </div>
                   )}
 
+                  {/* Actions */}
+                  {(item.mission.status === 'ACCEPTED' || item.mission.status === 'IN_PROGRESS') && (
+                    <div className="mt-3 pt-3 border-t">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          router.push(`/dashboard/tracking/${item.mission.id}`);
+                        }}
+                        className="w-full sm:w-auto"
+                      >
+                        <MapPin className="h-4 w-4 mr-2" />
+                        Suivre en temps réel
+                      </Button>
+                    </div>
+                  )}
+
                   {/* Timestamps */}
                   <div className="flex items-center gap-4 text-xs text-muted-foreground pt-2 border-t">
                     {item.mission.acceptedAt && (

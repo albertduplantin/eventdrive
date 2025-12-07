@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
-import { getDriverLocation, calculateDistance, estimateETA, formatETA } from '@/lib/actions/tracking';
+import { getDriverLocation } from '@/lib/actions/tracking';
+import { calculateDistance, estimateETA, formatETA } from '@/lib/tracking-utils';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { MapPin, Clock, Navigation, Loader2 } from 'lucide-react';

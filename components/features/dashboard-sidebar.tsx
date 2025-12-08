@@ -97,16 +97,16 @@ export function DashboardSidebar({ user }: DashboardSidebarProps) {
   const SidebarContent = () => (
     <>
       {/* Logo */}
-      <div className="flex h-20 items-center px-6 border-b border-purple-100/20">
+      <div className="flex h-20 items-center px-6 border-b border-black/10 dark:border-white/10">
         <Link href="/dashboard" className="flex items-center gap-3 group" onClick={() => setIsMobileMenuOpen(false)}>
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-orange-600 to-amber-600 shadow-lg group-hover:shadow-xl transition-shadow">
-            <MapPin className="h-6 w-6 text-white" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-black dark:bg-white shadow-lg group-hover:shadow-xl transition-all group-hover:scale-105">
+            <MapPin className="h-6 w-6 text-white dark:text-black" />
           </div>
           <div>
-            <span className="text-xl font-bold bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent">
+            <span className="text-xl font-bold tracking-tight">
               FestivalDrive
             </span>
-            <p className="text-xs text-gray-500">Gestion VIP</p>
+            <p className="text-xs text-muted-foreground">Gestion VIP</p>
           </div>
         </Link>
       </div>
@@ -123,10 +123,10 @@ export function DashboardSidebar({ user }: DashboardSidebarProps) {
               href={item.href}
               onClick={() => setIsMobileMenuOpen(false)}
               className={cn(
-                'flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-all',
+                'flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-all',
                 isActive
-                  ? 'bg-gradient-to-r from-orange-600 to-amber-600 text-white shadow-lg shadow-orange-500/30'
-                  : 'text-gray-700 hover:bg-purple-50 hover:text-purple-700'
+                  ? 'bg-black dark:bg-white text-white dark:text-black shadow-lg'
+                  : 'text-foreground hover:bg-black/5 dark:hover:bg-white/5'
               )}
             >
               <Icon className="h-5 w-5 flex-shrink-0" />
@@ -137,14 +137,14 @@ export function DashboardSidebar({ user }: DashboardSidebarProps) {
       </nav>
 
       {/* User Role Badge */}
-      <div className="p-4 border-t border-purple-100/20">
-        <div className="rounded-xl bg-gradient-to-br from-orange-50 to-amber-50 border-2 border-orange-200 p-4">
-          <p className="text-xs font-medium text-purple-600 mb-1">Votre rôle</p>
-          <p className="text-sm font-bold bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent">
+      <div className="p-4 border-t border-black/10 dark:border-white/10">
+        <div className="rounded-lg bg-black/5 dark:bg-white/5 border-2 border-black/10 dark:border-white/10 p-4">
+          <p className="text-xs font-medium text-muted-foreground mb-1">Votre rôle</p>
+          <p className="text-sm font-bold">
             {getRoleLabel(userRole)}
           </p>
           {user?.firstName && (
-            <p className="text-xs text-gray-600 mt-2">
+            <p className="text-xs text-muted-foreground mt-2">
               {user.firstName} {user.lastName}
             </p>
           )}
@@ -158,7 +158,7 @@ export function DashboardSidebar({ user }: DashboardSidebarProps) {
       {/* Mobile Menu Button */}
       <button
         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        className="lg:hidden fixed top-4 left-4 z-50 flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-orange-600 to-amber-600 text-white shadow-lg"
+        className="lg:hidden fixed top-4 left-4 z-50 flex h-10 w-10 items-center justify-center rounded-lg bg-black dark:bg-white text-white dark:text-black shadow-lg"
       >
         {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
       </button>
@@ -172,14 +172,14 @@ export function DashboardSidebar({ user }: DashboardSidebarProps) {
       )}
 
       {/* Desktop Sidebar */}
-      <aside className="hidden lg:flex lg:w-72 flex-col bg-white border-r border-gray-200 shadow-xl">
+      <aside className="hidden lg:flex lg:w-72 flex-col bg-white dark:bg-black border-r border-black/10 dark:border-white/10 shadow-xl">
         <SidebarContent />
       </aside>
 
       {/* Mobile Sidebar */}
       <aside
         className={cn(
-          'lg:hidden fixed inset-y-0 left-0 z-40 w-72 flex flex-col bg-white shadow-2xl transition-transform duration-300',
+          'lg:hidden fixed inset-y-0 left-0 z-40 w-72 flex flex-col bg-white dark:bg-black shadow-2xl transition-transform duration-300',
           isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
         )}
       >

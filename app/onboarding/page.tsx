@@ -21,20 +21,20 @@ export default async function OnboardingPage() {
   } : null;
 
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen bg-white dark:bg-black flex items-center justify-center p-4 relative overflow-hidden">
       {/* Animated background blobs */}
-      <div className="absolute top-0 left-0 w-96 h-96 bg-gray-100 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
-      <div className="absolute top-0 right-0 w-96 h-96 bg-gray-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
-      <div className="absolute bottom-0 left-1/2 w-96 h-96 bg-gray-100 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
+      <div className="absolute top-0 left-0 w-96 h-96 bg-black/5 dark:bg-white/5 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-30 animate-blob"></div>
+      <div className="absolute top-0 right-0 w-96 h-96 bg-black/10 dark:bg-white/10 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
+      <div className="absolute bottom-0 left-1/2 w-96 h-96 bg-black/5 dark:bg-white/5 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-30 animate-blob animation-delay-4000"></div>
 
       <div className="w-full max-w-2xl relative z-10">
         <div className="text-center mb-8 space-y-3">
           <div className="inline-block">
-            <h1 className="text-5xl font-bold mb-2 text-black">
+            <h1 className="text-5xl font-bold mb-2 tracking-tight">
               Bienvenue sur FestivalDrive
             </h1>
           </div>
-          <p className="text-lg text-gray-600 font-medium">
+          <p className="text-lg text-muted-foreground font-medium">
             Configurez votre compte pour commencer a gerer vos transports VIP
           </p>
         </div>

@@ -272,11 +272,11 @@ async function getStats(festivalId: string, role: UserRole) {
 
 function StatusBadge({ status }: { status: string }) {
   const styles: Record<string, string> = {
-    PENDING: 'bg-yellow-100 text-yellow-800',
-    ASSIGNED: 'bg-blue-100 text-blue-800',
-    ACCEPTED: 'bg-green-100 text-green-800',
-    COMPLETED: 'bg-gray-100 text-gray-800',
-    CANCELLED: 'bg-red-100 text-red-800',
+    PENDING: 'bg-black/10 dark:bg-white/10 text-black dark:text-white border border-black/20 dark:border-white/20',
+    ASSIGNED: 'bg-black/20 dark:bg-white/20 text-black dark:text-white border border-black/30 dark:border-white/30',
+    ACCEPTED: 'bg-black dark:bg-white text-white dark:text-black border border-black dark:border-white',
+    COMPLETED: 'bg-black/5 dark:bg-white/5 text-black/60 dark:text-white/60 border border-black/10 dark:border-white/10',
+    CANCELLED: 'bg-black/30 dark:bg-white/30 text-black dark:text-white border border-black/40 dark:border-white/40',
   };
 
   const labels: Record<string, string> = {
@@ -289,8 +289,8 @@ function StatusBadge({ status }: { status: string }) {
 
   return (
     <span
-      className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${
-        styles[status] || 'bg-gray-100 text-gray-800'
+      className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ${
+        styles[status] || 'bg-black/10 dark:bg-white/10 text-black dark:text-white border border-black/20 dark:border-white/20'
       }`}
     >
       {labels[status] || status}
@@ -339,9 +339,9 @@ function QuickActions({ role }: { role: UserRole }) {
         <a
           key={action.href}
           href={action.href}
-          className="flex items-center gap-2 rounded-lg border p-3 transition-colors hover:bg-zinc-50"
+          className="flex items-center gap-3 rounded-lg border-2 border-black/5 dark:border-white/5 p-4 transition-all hover:border-black/20 dark:hover:border-white/20 hover:bg-black/5 dark:hover:bg-white/5"
         >
-          <AlertCircle className="h-5 w-5 text-primary" />
+          <AlertCircle className="h-5 w-5 text-black dark:text-white" />
           <span className="text-sm font-medium">{action.label}</span>
         </a>
       ))}

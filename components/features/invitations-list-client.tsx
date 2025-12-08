@@ -1,13 +1,14 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Plus, Copy, QrCode, X, Check, Mail, Clock } from 'lucide-react';
+import { Plus, Copy, QrCode, X, Check, Mail, Clock, Trash2, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { getInvitations, deactivateInvitation } from '@/lib/actions/invitations';
+import { getInvitations, deactivateInvitation, deleteInvitation } from '@/lib/actions/invitations';
 import { UserRole, type User } from '@/types';
 import { CreateInvitationDialog } from '@/components/features/create-invitation-dialog';
 import { QRCodeDialog } from '@/components/features/qrcode-dialog';
+import { DeleteConfirmDialog } from '@/components/features/delete-confirm-dialog';
 import { useToast } from '@/hooks/use-toast';
 
 interface InvitationsListClientProps {
@@ -30,6 +31,7 @@ export function InvitationsListClient({ currentUser }: InvitationsListClientProp
   const [loading, setLoading] = useState(true);
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const [qrCodeInvitation, setQrCodeInvitation] = useState<Invitation | null>(null);
+  const [invitationToDelete, setInvitationToDelete] = useState<Invitation | null>(null);
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
   const { toast } = useToast();
 
@@ -50,6 +52,17 @@ export function InvitationsListClient({ currentUser }: InvitationsListClientProp
     const result = await deactivateInvitation(invitationId);
     if (result.success) {
       toast({ title: 'Invitation désactivée', description: result.message });
+      loadInvitations();
+    } else {
+      toast({ title: 'Erreur', description: result.error, variant: 'destructive' });
+    }
+  }
+
+  async function handleDelete(invitationId: string) {
+    const result = await deleteInvitation(invitationId);
+    if (result.success) {
+      toast({ title: 'Invitation supprimée', description: result.message });
+      setInvitationToDelete(null);
       loadInvitations();
     } else {
       toast({ title: 'Erreur', description: result.error, variant: 'destructive' });
@@ -164,6 +177,12 @@ export function InvitationsListClient({ currentUser }: InvitationsListClientProp
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
+                      {invitation.usedCount > 0 && (
+                        <div className="mr-2 flex items-center gap-1 px-3 py-1 rounded-lg bg-black/10 dark:bg-white/10 border border-black/20 dark:border-white/20">
+                          <Users className="h-4 w-4" />
+                          <span className="text-sm font-medium">{invitation.usedCount}</span>
+                        </div>
+                      )}
                       <Button
                         variant="ghost"
                         size="sm"
@@ -177,7 +196,7 @@ export function InvitationsListClient({ currentUser }: InvitationsListClientProp
                         ) : (
                           <>
                             <Copy className="mr-2 h-4 w-4" />
-                            Copier le lien
+                            Copier
                           </>
                         )}
                       </Button>
@@ -186,16 +205,22 @@ export function InvitationsListClient({ currentUser }: InvitationsListClientProp
                         size="sm"
                         onClick={() => setQrCodeInvitation(invitation)}
                       >
-                        <QrCode className="mr-2 h-4 w-4" />
-                        QR Code
+                        <QrCode className="h-4 w-4" />
                       </Button>
                       <Button
                         variant="ghost"
                         size="sm"
                         onClick={() => handleDeactivate(invitation.id)}
                       >
-                        <X className="mr-2 h-4 w-4" />
-                        Désactiver
+                        <X className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setInvitationToDelete(invitation)}
+                        className="text-destructive hover:text-destructive"
+                      >
+                        <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>
                   </div>
@@ -256,6 +281,17 @@ export function InvitationsListClient({ currentUser }: InvitationsListClientProp
         onOpenChange={(open) => {
           if (!open) setQrCodeInvitation(null);
         }}
+      />
+
+      {/* Delete Confirmation Dialog */}
+      <DeleteConfirmDialog
+        open={invitationToDelete !== null}
+        onOpenChange={(open) => {
+          if (!open) setInvitationToDelete(null);
+        }}
+        onConfirm={() => invitationToDelete && handleDelete(invitationToDelete.id)}
+        title="Supprimer cette invitation ?"
+        description={`Êtes-vous sûr de vouloir supprimer l'invitation "${invitationToDelete?.code}" ? Cette action est irréversible. ${invitationToDelete?.usedCount && invitationToDelete.usedCount > 0 ? `Cette invitation a déjà été utilisée ${invitationToDelete.usedCount} fois.` : ''}`}
       />
     </>
   );

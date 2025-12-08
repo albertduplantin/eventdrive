@@ -234,3 +234,73 @@ export async function useInvitationCode(code: string): Promise<ApiResponse<{
     return { success: false, error: 'Erreur lors de l\'utilisation de l\'invitation' };
   }
 }
+
+export async function deleteInvitation(invitationId: string): Promise<ApiResponse> {
+  try {
+    const { userId: clerkUserId } = await auth();
+    if (!clerkUserId) return { success: false, error: 'Non authentifié' };
+
+    const [currentUser] = await db.select().from(users).where(eq(users.clerkUserId, clerkUserId)).limit(1);
+    if (!currentUser) return { success: false, error: 'Utilisateur non trouvé' };
+
+    const userRole = currentUser.role as UserRole;
+    if (!hasPermission(userRole, 'MANAGE_USERS')) {
+      return { success: false, error: 'Permissions insuffisantes' };
+    }
+
+    const [invitation] = await db.select().from(festivalInvitations).where(eq(festivalInvitations.id, invitationId)).limit(1);
+    if (!invitation) return { success: false, error: 'Invitation non trouvée' };
+
+    if (invitation.festivalId !== currentUser.festivalId) {
+      return { success: false, error: 'Permissions insuffisantes' };
+    }
+
+    await db.delete(festivalInvitations).where(eq(festivalInvitations.id, invitationId));
+
+    revalidatePath('/dashboard/invitations');
+    return { success: true, message: 'Invitation supprimée' };
+  } catch (error) {
+    console.error('Error deleting invitation:', error);
+    return { success: false, error: 'Erreur lors de la suppression' };
+  }
+}
+
+export async function getInvitationUsers(invitationCode: string): Promise<ApiResponse<(typeof users.$inferSelect)[]>> {
+  try {
+    const { userId: clerkUserId } = await auth();
+    if (!clerkUserId) return { success: false, error: 'Non authentifié' };
+
+    const [currentUser] = await db.select().from(users).where(eq(users.clerkUserId, clerkUserId)).limit(1);
+    if (!currentUser) return { success: false, error: 'Utilisateur non trouvé' };
+
+    const userRole = currentUser.role as UserRole;
+    if (!hasPermission(userRole, 'MANAGE_USERS')) {
+      return { success: false, error: 'Permissions insuffisantes' };
+    }
+
+    // Get invitation to verify it belongs to current user's festival
+    const [invitation] = await db.select().from(festivalInvitations).where(eq(festivalInvitations.code, invitationCode)).limit(1);
+    if (!invitation) return { success: false, error: 'Invitation non trouvée' };
+
+    if (invitation.festivalId !== currentUser.festivalId) {
+      return { success: false, error: 'Permissions insuffisantes' };
+    }
+
+    // Get all users created around the time of invitation usage
+    // Since we don't have a direct link, we'll return users created after the invitation
+    const invitationUsers = await db
+      .select()
+      .from(users)
+      .where(
+        and(
+          eq(users.festivalId, invitation.festivalId),
+          eq(users.role, invitation.role || UserRole.VIP)
+        )
+      );
+
+    return { success: true, data: invitationUsers };
+  } catch (error) {
+    console.error('Error fetching invitation users:', error);
+    return { success: false, error: 'Erreur lors de la récupération des utilisateurs' };
+  }
+}

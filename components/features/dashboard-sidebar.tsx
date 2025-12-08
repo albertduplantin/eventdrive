@@ -14,6 +14,7 @@ import {
   BarChart3,
   Menu,
   X,
+  Mail,
 } from 'lucide-react';
 import { cn, hasPermission } from '@/lib/utils';
 import { UserRole } from '@/types';
@@ -76,6 +77,12 @@ const navItems: NavItem[] = [
     href: '/dashboard/reports',
     icon: BarChart3,
     requiredPermission: 'VIEW_ANALYTICS',
+  },
+  {
+    label: 'Invitations',
+    href: '/dashboard/invitations',
+    icon: Mail,
+    requiredPermission: 'MANAGE_USERS',
   },
   {
     label: 'Gestion utilisateurs',

@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation';
 import { getCurrentUser } from '@/lib/auth';
 import { DashboardSidebar } from '@/components/features/dashboard-sidebar';
 import { DashboardHeader } from '@/components/features/dashboard-header';
+import { ProfileCompletionModal } from '@/components/features/profile-completion-modal';
 
 // Force all dashboard pages to be dynamic
 export const dynamic = 'force-dynamic';
@@ -23,8 +24,21 @@ export default async function DashboardLayout({
     redirect('/onboarding');
   }
 
+  // Check if profile needs completion
+  const needsProfileCompletion = !userData.dbUser?.phone ||
+    (!userData.dbUser?.address &&
+     (userData.dbUser?.role === 'DRIVER' || userData.dbUser?.role === 'VIP'));
+
   return (
     <div className="flex min-h-screen bg-neutral-50 dark:bg-neutral-950">
+      {/* Profile Completion Modal */}
+      {userData.dbUser && (
+        <ProfileCompletionModal
+          user={userData.dbUser}
+          open={needsProfileCompletion}
+        />
+      )}
+
       {/* Sidebar */}
       <DashboardSidebar user={userData.dbUser} />
 

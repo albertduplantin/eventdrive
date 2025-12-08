@@ -125,7 +125,7 @@ export default function VipsPage() {
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-black">
+          <h1 className="text-3xl font-bold tracking-tight">
             Gestion des VIPs
           </h1>
           <p className="text-muted-foreground mt-1">
@@ -136,7 +136,6 @@ export default function VipsPage() {
           <Button
             variant="outline"
             onClick={() => setIsImportOpen(true)}
-            className="border-2 hover:border-blue-500"
           >
             <Upload className="h-4 w-4 mr-2" />
             Importer
@@ -144,14 +143,12 @@ export default function VipsPage() {
           <Button
             variant="outline"
             onClick={exportToCSV}
-            className="border-2 hover:border-purple-500"
           >
             <FileDown className="h-4 w-4 mr-2" />
             Exporter
           </Button>
           <Button
             onClick={handleAdd}
-            className="bg-gradient-to-r from-slate-700 to-gray-700 hover:from-purple-700 hover:to-blue-700"
           >
             <Plus className="h-4 w-4 mr-2" />
             Ajouter un VIP
@@ -167,23 +164,23 @@ export default function VipsPage() {
             placeholder="Rechercher par nom, prénom, email ou organisation..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 h-11 border-2 focus:border-purple-500"
+            className="pl-10 h-11"
           />
         </div>
       </div>
 
       {/* Table */}
-      <div className="rounded-xl border-2 border-gray-200 bg-white shadow-sm overflow-hidden">
+      <div className="rounded-lg border-2 border-black/10 dark:border-white/10 bg-card shadow-sm overflow-hidden">
         <Table>
           <TableHeader>
-            <TableRow className="bg-gradient-to-r from-purple-50 to-blue-50 hover:from-purple-50 hover:to-blue-50">
-              <TableHead className="font-semibold text-gray-900">Nom</TableHead>
-              <TableHead className="font-semibold text-gray-900">Prénom</TableHead>
-              <TableHead className="font-semibold text-gray-900">Email</TableHead>
-              <TableHead className="font-semibold text-gray-900">Téléphone</TableHead>
-              <TableHead className="font-semibold text-gray-900">Organisation</TableHead>
-              <TableHead className="font-semibold text-gray-900">Catégorie</TableHead>
-              <TableHead className="text-right font-semibold text-gray-900">Actions</TableHead>
+            <TableRow className="bg-black/5 dark:bg-white/5 hover:bg-black/5 dark:hover:bg-white/5 border-b-2 border-black/10 dark:border-white/10">
+              <TableHead className="font-semibold">Nom</TableHead>
+              <TableHead className="font-semibold">Prénom</TableHead>
+              <TableHead className="font-semibold">Email</TableHead>
+              <TableHead className="font-semibold">Téléphone</TableHead>
+              <TableHead className="font-semibold">Organisation</TableHead>
+              <TableHead className="font-semibold">Catégorie</TableHead>
+              <TableHead className="text-right font-semibold">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -204,7 +201,7 @@ export default function VipsPage() {
                       <Button
                         onClick={handleAdd}
                         variant="outline"
-                        className="mt-2 border-2 hover:border-purple-500"
+                        className="mt-2"
                       >
                         <Plus className="h-4 w-4 mr-2" />
                         Ajouter votre premier VIP
@@ -215,7 +212,7 @@ export default function VipsPage() {
               </TableRow>
             ) : (
               vipList.map((vip) => (
-                <TableRow key={vip.id} className="hover:bg-purple-50/50 transition-colors">
+                <TableRow key={vip.id} className="hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
                   <TableCell className="font-medium">{vip.lastName}</TableCell>
                   <TableCell>{vip.firstName}</TableCell>
                   <TableCell className="text-muted-foreground">{vip.email || '—'}</TableCell>
@@ -223,7 +220,7 @@ export default function VipsPage() {
                   <TableCell className="text-muted-foreground">{vip.organization || '—'}</TableCell>
                   <TableCell>
                     {vip.category ? (
-                      <span className="inline-flex items-center rounded-full border border-purple-200 bg-purple-50 px-2.5 py-0.5 text-xs font-medium text-purple-700">
+                      <span className="inline-flex items-center rounded-full border-2 border-black/20 dark:border-white/20 bg-black/10 dark:bg-white/10 px-2.5 py-0.5 text-xs font-medium">
                         {vip.category}
                       </span>
                     ) : (
@@ -236,7 +233,7 @@ export default function VipsPage() {
                         variant="ghost"
                         size="icon"
                         onClick={() => handleEdit(vip)}
-                        className="h-8 w-8 hover:bg-purple-50 hover:text-purple-600"
+                        className="h-8 w-8"
                       >
                         <Pencil className="h-4 w-4" />
                       </Button>
@@ -244,7 +241,7 @@ export default function VipsPage() {
                         variant="ghost"
                         size="icon"
                         onClick={() => handleDelete(vip.id)}
-                        className="h-8 w-8 hover:bg-red-50 hover:text-red-600"
+                        className="h-8 w-8 hover:bg-black/20 dark:hover:bg-white/20"
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>
@@ -259,9 +256,9 @@ export default function VipsPage() {
 
       {/* Stats */}
       {vipList.length > 0 && (
-        <div className="flex items-center justify-between rounded-xl border-2 border-gray-200 bg-white p-4">
+        <div className="flex items-center justify-between rounded-lg border-2 border-black/10 dark:border-white/10 bg-card p-4">
           <p className="text-sm text-muted-foreground">
-            Total: <span className="font-semibold text-gray-900">{vipList.length}</span> VIP{vipList.length > 1 ? 's' : ''}
+            Total: <span className="font-semibold">{vipList.length}</span> VIP{vipList.length > 1 ? 's' : ''}
           </p>
         </div>
       )}

@@ -65,11 +65,11 @@ export default function DriversPage() {
   }
 
   return (
-    <div className="p-8 space-y-6">
+    <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-black">
+          <h1 className="text-3xl font-bold tracking-tight">
             Chauffeurs
           </h1>
           <p className="text-muted-foreground mt-1">
@@ -101,25 +101,25 @@ export default function DriversPage() {
       {/* Stats */}
       {!isLoading && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="rounded-lg border-2 border-purple-200 bg-purple-50 p-4">
-            <div className="text-2xl font-bold text-purple-900">{drivers.length}</div>
-            <div className="text-sm text-purple-700">Total chauffeurs</div>
+          <div className="rounded-lg border-2 border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 p-4">
+            <div className="text-2xl font-bold">{drivers.length}</div>
+            <div className="text-sm text-muted-foreground">Total chauffeurs</div>
           </div>
-          <div className="rounded-lg border-2 border-green-200 bg-green-50 p-4">
-            <div className="text-2xl font-bold text-green-900">
+          <div className="rounded-lg border-2 border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 p-4">
+            <div className="text-2xl font-bold">
               {drivers.filter(d => d.phone).length}
             </div>
-            <div className="text-sm text-green-700">Avec téléphone</div>
+            <div className="text-sm text-muted-foreground">Avec téléphone</div>
           </div>
-          <div className="rounded-lg border-2 border-blue-200 bg-blue-50 p-4">
-            <div className="text-2xl font-bold text-blue-900">
+          <div className="rounded-lg border-2 border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 p-4">
+            <div className="text-2xl font-bold">
               {drivers.filter(d => d.address).length}
             </div>
-            <div className="text-sm text-blue-700">Avec adresse</div>
+            <div className="text-sm text-muted-foreground">Avec adresse</div>
           </div>
-          <div className="rounded-lg border-2 border-orange-200 bg-orange-50 p-4">
-            <div className="text-2xl font-bold text-orange-900">0</div>
-            <div className="text-sm text-orange-700">Disponibles aujourd'hui</div>
+          <div className="rounded-lg border-2 border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 p-4">
+            <div className="text-2xl font-bold">0</div>
+            <div className="text-sm text-muted-foreground">Disponibles aujourd'hui</div>
           </div>
         </div>
       )}
@@ -147,8 +147,8 @@ export default function DriversPage() {
                       className="w-16 h-16 rounded-full object-cover"
                     />
                   ) : (
-                    <div className="w-16 h-16 rounded-full bg-gradient-to-br from-slate-700 to-gray-700 flex items-center justify-center">
-                      <span className="text-white text-xl font-bold">
+                    <div className="w-16 h-16 rounded-full bg-black dark:bg-white flex items-center justify-center shadow-lg">
+                      <span className="text-white dark:text-black text-xl font-bold">
                         {getInitials(driver.firstName || '', driver.lastName || '')}
                       </span>
                     </div>

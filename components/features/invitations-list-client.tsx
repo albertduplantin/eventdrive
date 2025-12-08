@@ -1,10 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Plus, Copy, QrCode, X, Check, Mail, Clock, Trash2, Users } from 'lucide-react';
+import { Plus, Copy, QrCode, X, Check, Mail, Clock, Trash2, Users, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { getInvitations, deactivateInvitation, deleteInvitation } from '@/lib/actions/invitations';
+import { getInvitations, deactivateInvitation, reactivateInvitation, deleteInvitation } from '@/lib/actions/invitations';
 import { UserRole, type User } from '@/types';
 import { CreateInvitationDialog } from '@/components/features/create-invitation-dialog';
 import { QRCodeDialog } from '@/components/features/qrcode-dialog';
@@ -52,6 +52,16 @@ export function InvitationsListClient({ currentUser }: InvitationsListClientProp
     const result = await deactivateInvitation(invitationId);
     if (result.success) {
       toast({ title: 'Invitation désactivée', description: result.message });
+      loadInvitations();
+    } else {
+      toast({ title: 'Erreur', description: result.error, variant: 'destructive' });
+    }
+  }
+
+  async function handleReactivate(invitationId: string) {
+    const result = await reactivateInvitation(invitationId);
+    if (result.success) {
+      toast({ title: 'Invitation réactivée', description: result.message });
       loadInvitations();
     } else {
       toast({ title: 'Erreur', description: result.error, variant: 'destructive' });
@@ -244,17 +254,36 @@ export function InvitationsListClient({ currentUser }: InvitationsListClientProp
                 {inactiveInvitations.map((invitation) => (
                   <div
                     key={invitation.id}
-                    className="flex items-center justify-between rounded-lg border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 p-3 opacity-60"
+                    className="flex items-center justify-between rounded-lg border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 p-3"
                   >
                     <div className="flex items-center gap-3">
-                      <code className="font-mono text-sm">{invitation.code}</code>
-                      <span className={`inline-flex items-center rounded-lg px-2 py-0.5 text-xs font-medium ${getRoleBadgeStyle(invitation.role)}`}>
+                      <code className="font-mono text-sm opacity-60">{invitation.code}</code>
+                      <span className={`inline-flex items-center rounded-lg px-2 py-0.5 text-xs font-medium opacity-60 ${getRoleBadgeStyle(invitation.role)}`}>
                         {getRoleLabel(invitation.role)}
                       </span>
+                      <span className="text-xs text-muted-foreground">
+                        {invitation.usedCount} utilisation{invitation.usedCount > 1 ? 's' : ''}
+                      </span>
                     </div>
-                    <span className="text-xs text-muted-foreground">
-                      {invitation.usedCount} utilisation{invitation.usedCount > 1 ? 's' : ''}
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleReactivate(invitation.id)}
+                        title="Réactiver"
+                      >
+                        <RotateCcw className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setInvitationToDelete(invitation)}
+                        className="text-destructive hover:text-destructive"
+                        title="Supprimer"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
                   </div>
                 ))}
               </div>

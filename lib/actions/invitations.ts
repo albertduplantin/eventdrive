@@ -150,6 +150,36 @@ export async function deactivateInvitation(invitationId: string): Promise<ApiRes
   }
 }
 
+export async function reactivateInvitation(invitationId: string): Promise<ApiResponse> {
+  try {
+    const { userId: clerkUserId } = await auth();
+    if (!clerkUserId) return { success: false, error: 'Non authentifié' };
+
+    const [currentUser] = await db.select().from(users).where(eq(users.clerkUserId, clerkUserId)).limit(1);
+    if (!currentUser) return { success: false, error: 'Utilisateur non trouvé' };
+
+    const userRole = currentUser.role as UserRole;
+    if (!hasPermission(userRole, 'MANAGE_USERS')) {
+      return { success: false, error: 'Permissions insuffisantes' };
+    }
+
+    const [invitation] = await db.select().from(festivalInvitations).where(eq(festivalInvitations.id, invitationId)).limit(1);
+    if (!invitation) return { success: false, error: 'Invitation non trouvée' };
+
+    if (invitation.festivalId !== currentUser.festivalId) {
+      return { success: false, error: 'Permissions insuffisantes' };
+    }
+
+    await db.update(festivalInvitations).set({ isActive: true }).where(eq(festivalInvitations.id, invitationId));
+
+    revalidatePath('/dashboard/invitations');
+    return { success: true, message: 'Invitation réactivée' };
+  } catch (error) {
+    console.error('Error reactivating invitation:', error);
+    return { success: false, error: 'Erreur lors de la réactivation' };
+  }
+}
+
 export async function validateInvitationCode(
   code: string
 ): Promise<ApiResponse<{

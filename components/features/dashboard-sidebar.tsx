@@ -16,7 +16,7 @@ import {
   X,
   Mail,
 } from 'lucide-react';
-import { cn, hasPermission } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import { UserRole } from '@/types';
 import type { users } from '@/lib/db/schema';
 
@@ -28,84 +28,291 @@ interface NavItem {
   label: string;
   href: string;
   icon: React.ComponentType<{ className?: string }>;
-  requiredPermission?: keyof typeof import('@/types').PERMISSIONS;
 }
 
-const navItems: NavItem[] = [
-  {
-    label: 'Tableau de bord',
-    href: '/dashboard',
-    icon: LayoutDashboard,
-  },
-  {
-    label: 'VIPs',
-    href: '/dashboard/vips',
-    icon: Users,
-    requiredPermission: 'VIEW_VIPS',
-  },
-  {
-    label: 'Transports',
-    href: '/dashboard/transports',
-    icon: MapPin,
-    requiredPermission: 'CREATE_TRANSPORT_REQUEST',
-  },
-  {
-    label: 'Chauffeurs',
-    href: '/dashboard/drivers',
-    icon: Car,
-    requiredPermission: 'VIEW_DRIVERS',
-  },
-  {
-    label: 'Affectations',
-    href: '/dashboard/missions',
-    icon: Calendar,
-    requiredPermission: 'ASSIGN_DRIVERS',
-  },
-  {
-    label: 'Suivi temps réel',
-    href: '/dashboard/tracking',
-    icon: MapPin,
-    requiredPermission: 'VIEW_REAL_TIME_TRACKING',
-  },
-  {
-    label: 'Notifications',
-    href: '/dashboard/notifications',
-    icon: Bell,
-  },
-  {
-    label: 'Rapports',
-    href: '/dashboard/reports',
-    icon: BarChart3,
-    requiredPermission: 'VIEW_ANALYTICS',
-  },
-  {
-    label: 'Invitations',
-    href: '/dashboard/invitations',
-    icon: Mail,
-    requiredPermission: 'MANAGE_USERS',
-  },
-  {
-    label: 'Gestion utilisateurs',
-    href: '/dashboard/settings/users',
-    icon: Users,
-    requiredPermission: 'MANAGE_USERS',
-  },
-  {
-    label: 'Paramètres',
-    href: '/dashboard/settings',
-    icon: Settings,
-  },
-];
+// Helper function to get role-specific navigation
+function getNavItemsForRole(role: UserRole): NavItem[] {
+  // VIP - Interface ultra-simple
+  if (role === UserRole.VIP) {
+    return [
+      {
+        label: 'Mes transports',
+        href: '/dashboard',
+        icon: LayoutDashboard,
+      },
+      {
+        label: 'Demander un transport',
+        href: '/dashboard/transports',
+        icon: MapPin,
+      },
+      {
+        label: 'Suivi en direct',
+        href: '/dashboard/tracking',
+        icon: MapPin,
+      },
+      {
+        label: 'Notifications',
+        href: '/dashboard/notifications',
+        icon: Bell,
+      },
+      {
+        label: 'Mon profil',
+        href: '/dashboard/settings',
+        icon: Settings,
+      },
+    ];
+  }
+
+  // DRIVER - Missions et disponibilités
+  if (role === UserRole.DRIVER) {
+    return [
+      {
+        label: 'Mes missions',
+        href: '/dashboard',
+        icon: LayoutDashboard,
+      },
+      {
+        label: 'Toutes mes missions',
+        href: '/dashboard/missions',
+        icon: Calendar,
+      },
+      {
+        label: 'Mes disponibilités',
+        href: '/dashboard/my-availabilities',
+        icon: Calendar,
+      },
+      {
+        label: 'Historique',
+        href: '/dashboard/history',
+        icon: BarChart3,
+      },
+      {
+        label: 'Notifications',
+        href: '/dashboard/notifications',
+        icon: Bell,
+      },
+      {
+        label: 'Mon profil',
+        href: '/dashboard/settings',
+        icon: Settings,
+      },
+    ];
+  }
+
+  // VIP_MANAGER - Gestion VIPs et transports
+  if (role === UserRole.VIP_MANAGER) {
+    return [
+      {
+        label: 'Tableau de bord',
+        href: '/dashboard',
+        icon: LayoutDashboard,
+      },
+      {
+        label: 'VIPs',
+        href: '/dashboard/vips',
+        icon: Users,
+      },
+      {
+        label: 'Transports',
+        href: '/dashboard/transports',
+        icon: MapPin,
+      },
+      {
+        label: 'Suivi temps réel',
+        href: '/dashboard/tracking',
+        icon: MapPin,
+      },
+      {
+        label: 'Rapports',
+        href: '/dashboard/reports',
+        icon: BarChart3,
+      },
+      {
+        label: 'Notifications',
+        href: '/dashboard/notifications',
+        icon: Bell,
+      },
+      {
+        label: 'Paramètres',
+        href: '/dashboard/settings',
+        icon: Settings,
+      },
+    ];
+  }
+
+  // DRIVER_MANAGER - Gestion chauffeurs et affectations
+  if (role === UserRole.DRIVER_MANAGER) {
+    return [
+      {
+        label: 'Tableau de bord',
+        href: '/dashboard',
+        icon: LayoutDashboard,
+      },
+      {
+        label: 'Chauffeurs',
+        href: '/dashboard/drivers',
+        icon: Car,
+      },
+      {
+        label: 'Affectations',
+        href: '/dashboard/missions',
+        icon: Calendar,
+      },
+      {
+        label: 'Transports',
+        href: '/dashboard/transports',
+        icon: MapPin,
+      },
+      {
+        label: 'Suivi temps réel',
+        href: '/dashboard/tracking',
+        icon: MapPin,
+      },
+      {
+        label: 'Rapports',
+        href: '/dashboard/reports',
+        icon: BarChart3,
+      },
+      {
+        label: 'Notifications',
+        href: '/dashboard/notifications',
+        icon: Bell,
+      },
+      {
+        label: 'Paramètres',
+        href: '/dashboard/settings',
+        icon: Settings,
+      },
+    ];
+  }
+
+  // GENERAL_COORDINATOR - Vue d'ensemble complète
+  if (role === UserRole.GENERAL_COORDINATOR) {
+    return [
+      {
+        label: 'Tableau de bord',
+        href: '/dashboard',
+        icon: LayoutDashboard,
+      },
+      {
+        label: 'VIPs',
+        href: '/dashboard/vips',
+        icon: Users,
+      },
+      {
+        label: 'Chauffeurs',
+        href: '/dashboard/drivers',
+        icon: Car,
+      },
+      {
+        label: 'Transports',
+        href: '/dashboard/transports',
+        icon: MapPin,
+      },
+      {
+        label: 'Affectations',
+        href: '/dashboard/missions',
+        icon: Calendar,
+      },
+      {
+        label: 'Suivi temps réel',
+        href: '/dashboard/tracking',
+        icon: MapPin,
+      },
+      {
+        label: 'Rapports',
+        href: '/dashboard/reports',
+        icon: BarChart3,
+      },
+      {
+        label: 'Invitations',
+        href: '/dashboard/invitations',
+        icon: Mail,
+      },
+      {
+        label: 'Utilisateurs',
+        href: '/dashboard/settings/users',
+        icon: Users,
+      },
+      {
+        label: 'Notifications',
+        href: '/dashboard/notifications',
+        icon: Bell,
+      },
+      {
+        label: 'Paramètres',
+        href: '/dashboard/settings',
+        icon: Settings,
+      },
+    ];
+  }
+
+  // FESTIVAL_ADMIN & SUPER_ADMIN - Accès complet
+  return [
+    {
+      label: 'Tableau de bord',
+      href: '/dashboard',
+      icon: LayoutDashboard,
+    },
+    {
+      label: 'VIPs',
+      href: '/dashboard/vips',
+      icon: Users,
+    },
+    {
+      label: 'Chauffeurs',
+      href: '/dashboard/drivers',
+      icon: Car,
+    },
+    {
+      label: 'Transports',
+      href: '/dashboard/transports',
+      icon: MapPin,
+    },
+    {
+      label: 'Affectations',
+      href: '/dashboard/missions',
+      icon: Calendar,
+    },
+    {
+      label: 'Suivi temps réel',
+      href: '/dashboard/tracking',
+      icon: MapPin,
+    },
+    {
+      label: 'Rapports',
+      href: '/dashboard/reports',
+      icon: BarChart3,
+    },
+    {
+      label: 'Invitations',
+      href: '/dashboard/invitations',
+      icon: Mail,
+    },
+    {
+      label: 'Utilisateurs',
+      href: '/dashboard/settings/users',
+      icon: Users,
+    },
+    {
+      label: 'Notifications',
+      href: '/dashboard/notifications',
+      icon: Bell,
+    },
+    {
+      label: 'Paramètres',
+      href: '/dashboard/settings',
+      icon: Settings,
+    },
+  ];
+}
 
 export function DashboardSidebar({ user }: DashboardSidebarProps) {
   const pathname = usePathname();
   const userRole = user?.role as UserRole;
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const visibleNavItems = navItems.filter((item) => {
-    if (!item.requiredPermission) return true;
-    return hasPermission(userRole, item.requiredPermission);
-  });
+  const visibleNavItems = getNavItemsForRole(userRole);
 
   const SidebarContent = () => (
     <>

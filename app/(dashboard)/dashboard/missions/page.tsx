@@ -40,11 +40,11 @@ const STATUS_LABELS: Record<MissionStatus, string> = {
 };
 
 const STATUS_COLORS: Record<MissionStatus, string> = {
-  PROPOSED: 'bg-yellow-100 text-yellow-800 border-yellow-300',
-  ACCEPTED: 'bg-blue-100 text-blue-800 border-blue-300',
-  DECLINED: 'bg-red-100 text-red-800 border-red-300',
-  IN_PROGRESS: 'bg-purple-100 text-purple-800 border-purple-300',
-  COMPLETED: 'bg-green-100 text-green-800 border-green-300',
+  PROPOSED: 'bg-black/10 dark:bg-white/10 text-black dark:text-white border-2 border-black/20 dark:border-white/20',
+  ACCEPTED: 'bg-black/20 dark:bg-white/20 text-black dark:text-white border-2 border-black/30 dark:border-white/30',
+  DECLINED: 'bg-black/30 dark:bg-white/30 text-black dark:text-white border-2 border-black/40 dark:border-white/40',
+  IN_PROGRESS: 'bg-black dark:bg-white text-white dark:text-black border-2 border-black dark:border-white',
+  COMPLETED: 'bg-black/5 dark:bg-white/5 text-black/60 dark:text-white/60 border-2 border-black/10 dark:border-white/10',
 };
 
 export default function MissionsPage() {
@@ -120,11 +120,11 @@ export default function MissionsPage() {
   }
 
   return (
-    <div className="p-8 space-y-6">
+    <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-black">
+          <h1 className="text-3xl font-bold tracking-tight">
             Gestion des Missions
           </h1>
           <p className="text-muted-foreground mt-1">
@@ -139,32 +139,32 @@ export default function MissionsPage() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-        <Card className="p-4">
-          <div className="text-2xl font-bold text-yellow-600">
+        <Card className="p-4 border-2 border-black/10 dark:border-white/10">
+          <div className="text-2xl font-bold">
             {missions.filter((m) => m.mission.status === 'PROPOSED').length}
           </div>
           <div className="text-sm text-muted-foreground">Proposées</div>
         </Card>
-        <Card className="p-4">
-          <div className="text-2xl font-bold text-blue-600">
+        <Card className="p-4 border-2 border-black/10 dark:border-white/10">
+          <div className="text-2xl font-bold">
             {missions.filter((m) => m.mission.status === 'ACCEPTED').length}
           </div>
           <div className="text-sm text-muted-foreground">Acceptées</div>
         </Card>
-        <Card className="p-4">
-          <div className="text-2xl font-bold text-purple-600">
+        <Card className="p-4 border-2 border-black/10 dark:border-white/10">
+          <div className="text-2xl font-bold">
             {missions.filter((m) => m.mission.status === 'IN_PROGRESS').length}
           </div>
           <div className="text-sm text-muted-foreground">En cours</div>
         </Card>
-        <Card className="p-4">
-          <div className="text-2xl font-bold text-green-600">
+        <Card className="p-4 border-2 border-black/10 dark:border-white/10">
+          <div className="text-2xl font-bold">
             {missions.filter((m) => m.mission.status === 'COMPLETED').length}
           </div>
           <div className="text-sm text-muted-foreground">Terminées</div>
         </Card>
-        <Card className="p-4">
-          <div className="text-2xl font-bold text-red-600">
+        <Card className="p-4 border-2 border-black/10 dark:border-white/10">
+          <div className="text-2xl font-bold">
             {missions.filter((m) => m.mission.status === 'DECLINED').length}
           </div>
           <div className="text-sm text-muted-foreground">Refusées</div>

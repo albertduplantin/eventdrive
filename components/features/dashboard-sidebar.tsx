@@ -78,6 +78,12 @@ const navItems: NavItem[] = [
     requiredPermission: 'VIEW_ANALYTICS',
   },
   {
+    label: 'Gestion utilisateurs',
+    href: '/dashboard/settings/users',
+    icon: Users,
+    requiredPermission: 'MANAGE_USERS',
+  },
+  {
     label: 'Paramètres',
     href: '/dashboard/settings',
     icon: Settings,

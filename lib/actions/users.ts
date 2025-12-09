@@ -280,16 +280,19 @@ export async function updateUserProfile(
       return { success: false, error: 'Utilisateur non trouvé' };
     }
 
-    // Check if can manage this user
-    const userRole = currentUser.role as UserRole;
-    const { canManage, reason } = await canManageUser(
-      userRole,
-      currentUser.festivalId,
-      targetUser
-    );
+    // Check if can manage this user (allow self-editing)
+    const isSelfEdit = currentUser.id === userId;
+    if (!isSelfEdit) {
+      const userRole = currentUser.role as UserRole;
+      const { canManage, reason } = await canManageUser(
+        userRole,
+        currentUser.festivalId,
+        targetUser
+      );
 
-    if (!canManage) {
-      return { success: false, error: reason || 'Permissions insuffisantes' };
+      if (!canManage) {
+        return { success: false, error: reason || 'Permissions insuffisantes' };
+      }
     }
 
     // Update user

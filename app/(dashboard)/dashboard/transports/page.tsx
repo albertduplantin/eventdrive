@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Plus, Search, Calendar, Filter, Pencil, Trash2, XCircle } from 'lucide-react';
+import { Plus, Search, Calendar, Filter, Pencil, Trash2, XCircle, UserPlus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -21,6 +21,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { TransportFormDialog } from '@/components/features/transport-form-dialog';
+import { AssignDriverDialog } from '@/components/features/assign-driver-dialog';
 import { getTransportRequests, deleteTransportRequest, cancelTransportRequest } from '@/lib/actions/transports';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
@@ -60,6 +61,8 @@ export default function TransportsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [selectedTransport, setSelectedTransport] = useState<TransportRequestWithRelations | null>(null);
+  const [isAssignDialogOpen, setIsAssignDialogOpen] = useState(false);
+  const [transportToAssign, setTransportToAssign] = useState<TransportRequestWithRelations | null>(null);
 
   const loadTransports = async () => {
     setIsLoading(true);
@@ -139,6 +142,15 @@ export default function TransportsPage() {
   };
 
   const handleFormSuccess = () => {
+    loadTransports();
+  };
+
+  const handleAssign = (transport: TransportRequestWithRelations) => {
+    setTransportToAssign(transport);
+    setIsAssignDialogOpen(true);
+  };
+
+  const handleAssignSuccess = () => {
     loadTransports();
   };
 
@@ -303,6 +315,16 @@ export default function TransportsPage() {
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2">
+                      {transport.status === 'PENDING' && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleAssign(transport)}
+                          className="text-purple-600 hover:text-purple-700 hover:bg-purple-50"
+                        >
+                          <UserPlus className="h-4 w-4" />
+                        </Button>
+                      )}
                       {transport.status !== 'ASSIGNED' && transport.status !== 'CANCELLED' && transport.status !== 'COMPLETED' && (
                         <Button
                           variant="ghost"
@@ -345,6 +367,14 @@ export default function TransportsPage() {
         onOpenChange={setIsFormOpen}
         transport={selectedTransport}
         onSuccess={handleFormSuccess}
+      />
+
+      {/* Assign Driver Dialog */}
+      <AssignDriverDialog
+        open={isAssignDialogOpen}
+        onOpenChange={setIsAssignDialogOpen}
+        transportRequest={transportToAssign}
+        onSuccess={handleAssignSuccess}
       />
     </div>
   );

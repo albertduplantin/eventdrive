@@ -239,6 +239,11 @@ export async function useInvitationCode(code: string): Promise<ApiResponse<{
     const clerkUser = await clerkCurrentUser();
 
     // Create user in database
+    // Use the role from invitation, or default to VIP if not specified
+    const assignedRole = invitation.role ? invitation.role as UserRole : UserRole.VIP;
+
+    console.log('[useInvitationCode] invitation.role:', invitation.role, '| assignedRole:', assignedRole);
+
     const [newUser] = await db
       .insert(users)
       .values({
@@ -247,7 +252,7 @@ export async function useInvitationCode(code: string): Promise<ApiResponse<{
         email: clerkUser?.emailAddresses[0]?.emailAddress || '',
         firstName: clerkUser?.firstName || '',
         lastName: clerkUser?.lastName || '',
-        role: invitation.role || UserRole.VIP,
+        role: assignedRole,
         preferences: { notificationChannels: ['EMAIL'] },
       })
       .returning();

@@ -72,6 +72,8 @@ export async function createInvitation(data: {
       expiresAt.setDate(expiresAt.getDate() + data.expiresInDays);
     }
 
+    console.log('[createInvitation] Creating invitation with role:', data.role, '| code:', code);
+
     const [invitation] = await db
       .insert(festivalInvitations)
       .values({
@@ -85,6 +87,8 @@ export async function createInvitation(data: {
         isActive: true,
       })
       .returning();
+
+    console.log('[createInvitation] Invitation created:', { id: invitation.id, code: invitation.code, role: invitation.role });
 
     revalidatePath('/dashboard/invitations');
     return { success: true, data: invitation, message: 'Invitation créée avec succès' };

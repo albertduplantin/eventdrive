@@ -43,7 +43,8 @@
       "Bash(npm audit:*)",
       "Bash(powershell -Command:*)",
       "Bash(npm uninstall:*)",
-      "Bash(npm run type-check:*)"
+      "Bash(npm run type-check:*)",
+      "Bash(vercel logs:*)"
     ],
     "deny": [],
     "ask": []

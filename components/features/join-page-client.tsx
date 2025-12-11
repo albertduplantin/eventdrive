@@ -42,10 +42,15 @@ export function JoinPageClient({ invitation, festival, code }: JoinPageClientPro
         setTimeout(() => {
           router.push('/dashboard');
         }, 2000);
+      } else {
+        // If join failed, show error and stop loading
+        console.error('Failed to join:', result.error);
+        alert(result.error || 'Erreur lors de l\'inscription au festival');
+        setLoading(false);
       }
     } catch (error) {
       console.error('Error joining:', error);
-    } finally {
+      alert('Une erreur est survenue lors de l\'inscription');
       setLoading(false);
     }
   }
